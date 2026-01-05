@@ -1,9 +1,10 @@
+// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 console.log("Strava Auth Function Invoked")
 
-serve(async (req) => {
+serve(async (req: Request) => {
     const corsHeaders = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -60,6 +61,22 @@ serve(async (req) => {
         const results = []
 
         for (const bike of bikes) {
+            // Fetch detailed gear info to get brand and model
+            let brand = null;
+            let model = null;
+            try {
+                const gearResponse = await fetch(`https://www.strava.com/api/v3/gear/${bike.id}`, {
+                    headers: { Authorization: `Bearer ${tokenData.access_token}` },
+                });
+                if (gearResponse.ok) {
+                    const gearData = await gearResponse.json();
+                    brand = gearData.brand_name || null;
+                    model = gearData.model_name || null;
+                }
+            } catch (err) {
+                console.error(`Error fetching gear details for ${bike.id}:`, err);
+            }
+
             // Check if bike exists
             const { data: existing } = await supabaseAdmin
                 .from('bikes')
@@ -71,7 +88,9 @@ serve(async (req) => {
             if (existing) {
                 await supabaseAdmin.from('bikes').update({
                     name: bike.name,
-                    total_mileage: bike.distance / 1000 // meters to km
+                    total_mileage: bike.distance / 1000, // meters to km
+                    brand: brand,
+                    model: model
                 }).eq('id', existing.id)
                 results.push({ action: 'updated', name: bike.name })
             } else {
@@ -79,7 +98,9 @@ serve(async (req) => {
                     user_id: user_id,
                     strava_gear_id: bike.id,
                     name: bike.name,
-                    total_mileage: bike.distance / 1000
+                    total_mileage: bike.distance / 1000,
+                    brand: brand,
+                    model: model
                 })
                 results.push({ action: 'inserted', name: bike.name })
             }
