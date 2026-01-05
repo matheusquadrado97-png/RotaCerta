@@ -94,7 +94,7 @@ export default {
         shimmer: "shimmer 2s infinite",
       },
       boxShadow: {
-        glow: "0 0 40px hsl(24 95% 53% / 0.3)",
+        glow: "0 0 40px hsl(207 80% 51% / 0.3)",
       },
     },
   },
