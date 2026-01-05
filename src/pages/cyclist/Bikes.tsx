@@ -58,6 +58,7 @@ export default function Bikes() {
         bike_type: "MTB" as BikeType
     });
     const [editingBike, setEditingBike] = useState<BikeData | null>(null);
+    const [bikeToDelete, setBikeToDelete] = useState<BikeData | null>(null);
 
     const fetchBikes = async () => {
         if (!user) return;
@@ -117,7 +118,7 @@ export default function Bikes() {
                             suspensao: 0,
                             suspensao_count: 0
                         }
-                    });
+                    } as any);
                 if (error) throw error;
                 toast.success("Bike adicionada com sucesso!");
             }
@@ -274,34 +275,14 @@ export default function Bikes() {
                                             <Wrench className="h-5 w-5" />
                                         </Button>
 
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    className="h-10 w-10 rounded-xl hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
-                                                >
-                                                    <Trash2 className="h-5 w-5" />
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent className="bg-card/95 backdrop-blur-xl border-white/10 rounded-3xl shadow-2xl">
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle className="text-2xl font-black">Remover Bicicleta?</AlertDialogTitle>
-                                                    <AlertDialogDescription className="text-muted-foreground font-medium text-base">
-                                                        Esta ação não pode ser desfeita. Isso excluirá permanentemente a sua <span className="text-foreground font-bold">{bike.name}</span> e todo o histórico de manutenção associado.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter className="gap-3 mt-6">
-                                                    <AlertDialogCancel className="rounded-xl border-white/10 hover:bg-white/5 font-bold h-11">Cancelar</AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                        className="rounded-xl bg-destructive hover:bg-destructive/90 text-white font-bold h-11 shadow-glow-sm"
-                                                        onClick={() => handleDeleteBike(bike.id)}
-                                                    >
-                                                        Sim, Remover
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-10 w-10 rounded-xl hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                                            onClick={() => setBikeToDelete(bike)}
+                                        >
+                                            <Trash2 className="h-5 w-5" />
+                                        </Button>
                                     </div>
                                 </div>
                                 <div className="mt-6">
@@ -359,7 +340,7 @@ export default function Bikes() {
                                                             const newMaint = { ...bike.component_maintenance, [comp]: bike.total_mileage || 0 };
                                                             const { error } = await supabase
                                                                 .from('bikes')
-                                                                .update({ component_maintenance: newMaint as any })
+                                                                .update({ component_maintenance: newMaint } as any)
                                                                 .eq('id', bike.id);
                                                             if (!error) {
                                                                 toast.success(`Manutenção de ${comp} reiniciada!`);
@@ -410,7 +391,7 @@ export default function Bikes() {
                                                             };
                                                             const { error } = await supabase
                                                                 .from('bikes')
-                                                                .update({ component_maintenance: newMaint as any })
+                                                                .update({ component_maintenance: newMaint } as any)
                                                                 .eq('id', bike.id);
                                                             if (!error) {
                                                                 toast.success(`Manutenção de suspensão (${status.is200h ? '200h' : '50h'}) reiniciada!`);
@@ -434,6 +415,32 @@ export default function Bikes() {
                     ))
                 )}
             </div>
+
+            {/* Delete Confirmation Dialog */}
+            <AlertDialog open={!!bikeToDelete} onOpenChange={(open) => !open && setBikeToDelete(null)}>
+                <AlertDialogContent className="bg-card/95 backdrop-blur-xl border-white/10 rounded-3xl shadow-2xl">
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-2xl font-black">Remover Bicicleta?</AlertDialogTitle>
+                        <AlertDialogDescription className="text-muted-foreground font-medium text-base">
+                            Esta ação não pode ser desfeita. Isso excluirá permanentemente a sua <span className="text-foreground font-bold">{bikeToDelete?.name}</span> e todo o histórico de manutenção associado.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="gap-3 mt-6">
+                        <AlertDialogCancel className="rounded-xl border-white/10 hover:bg-white/5 font-bold h-11">Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                            className="rounded-xl bg-destructive hover:bg-destructive/90 text-white font-bold h-11 shadow-glow-sm"
+                            onClick={() => {
+                                if (bikeToDelete) {
+                                    handleDeleteBike(bikeToDelete.id);
+                                    setBikeToDelete(null);
+                                }
+                            }}
+                        >
+                            Sim, Remover
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
