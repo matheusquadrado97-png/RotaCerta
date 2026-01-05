@@ -32,7 +32,10 @@ serve(async (req: Request) => {
         })
 
         const tokenData = await tokenResponse.json()
-        if (tokenData.errors) throw new Error(JSON.stringify(tokenData.errors))
+        if (tokenData.errors) {
+            console.error("Strava Token Error:", JSON.stringify(tokenData));
+            throw new Error("Strava API: " + JSON.stringify(tokenData.errors));
+        }
 
         // 2. Initialize Admin Client
         const supabaseAdmin = createClient(

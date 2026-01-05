@@ -42,9 +42,7 @@ export default function StravaCallback() {
                 });
 
                 if (error) {
-                    // Check if it's just a non-2xx status but actually worked logic-wise?
-                    // Or maybe try client-side exchange if function fails?
-                    // For now, let's treat it as error but maybe suppress if navigate happens fast?
+                    console.error("Edge Function Error Object:", error);
                     throw error;
                 }
 
@@ -53,16 +51,28 @@ export default function StravaCallback() {
                 toast.success(`Conexão realizada! ${data.results?.length || 0} bikes sincronizadas.`);
 
             } catch (err: any) {
-                console.error(err);
-                // If the error is "Edge Function returned a non-2xx status code", it might be a temporary glitch or configuration.
-                // However, user said it "works" afterwards.
-                // This might be because the first call worked and the second (due to strict mode) failed with "code already used".
-                // The useRef fix above should solve this!
-                toast.error("Falha ao conectar: " + err.message);
-                setStatus("Erro ao conectar.");
-                // Even if error, give chance to go back?
+                console.error("Connection Flow Error:", err);
+
+                let msg = err.message;
+                // Try to extract body if it's a FunctionsHttpError
+                try {
+                    if (err.context && typeof err.context.json === 'function') {
+                        const body = await err.context.json();
+                        if (body && body.error) {
+                            msg = body.error;
+                        }
+                    }
+                } catch (e) {
+                    console.log("Could not parse error context JSON", e);
+                }
+
+                toast.error("Falha ao conectar: " + msg);
+                setStatus("Erro: " + msg);
             } finally {
-                navigate("/dashboard");
+                // Delay navigation slightly so user can see the error toast if present
+                if (!status.startsWith("Erro")) {
+                    navigate("/dashboard");
+                }
             }
         };
 
