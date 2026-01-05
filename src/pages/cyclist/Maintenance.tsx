@@ -22,6 +22,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 type AppointmentStatus =
     | "pending"
@@ -58,6 +59,7 @@ interface Appointment {
 export default function Maintenance() {
     usePageTitle("Minhas Manutenções");
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -148,7 +150,7 @@ export default function Maintenance() {
                         <p className="text-muted-foreground max-w-[300px] mt-1 mb-6">
                             Você ainda não realizou agendamentos pelo Pelotão.io.
                         </p>
-                        <Button className="gradient-primary hover:opacity-90 text-white shadow-glow">Explorar Oficinas</Button>
+                        <Button className="gradient-primary hover:opacity-90 text-white shadow-glow" onClick={() => navigate('/dashboard/search')}>Explorar Oficinas</Button>
                     </CardContent>
                 </Card>
             ) : (
