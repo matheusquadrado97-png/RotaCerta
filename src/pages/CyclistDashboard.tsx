@@ -39,7 +39,17 @@ export default function CyclistDashboard() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    const [isConnected, setIsConnected] = useState(false);
+
     useEffect(() => {
+        const checkConnection = async () => {
+            if (!user) return;
+            const { data } = await supabase.from('profiles').select('strava_access_token').eq('id', user.id).single();
+            if (data?.strava_access_token) {
+                setIsConnected(true);
+            }
+        };
+
         const fetchBikes = async () => {
             if (!user) return;
 
@@ -56,6 +66,7 @@ export default function CyclistDashboard() {
             setLoading(false);
         };
 
+        checkConnection();
         fetchBikes();
     }, [user]);
 
@@ -89,28 +100,30 @@ export default function CyclistDashboard() {
             </header>
 
             {/* Integration Banner */}
-            <Card className="gradient-hero border-white/20 overflow-hidden relative shadow-lg border animate-float">
-                <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-                    <div className="flex items-center gap-6">
-                        <div className="h-16 w-16 rounded-2xl gradient-primary flex items-center justify-center text-white shrink-0 shadow-glow">
-                            <Activity className="h-8 w-8" />
+            {!isConnected && (
+                <Card className="gradient-hero border-white/20 overflow-hidden relative shadow-lg border animate-float">
+                    <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                        <div className="flex items-center gap-6">
+                            <div className="h-16 w-16 rounded-2xl gradient-primary flex items-center justify-center text-white shrink-0 shadow-glow">
+                                <Activity className="h-8 w-8" />
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-bold tracking-tight text-gradient">Conecte seu Strava</h3>
+                                <p className="text-muted-foreground font-medium max-w-md">Sincronize suas atividades e acompanhe o desgaste dos seus componentes automaticamente.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-2xl font-bold tracking-tight text-gradient">Conecte seu Strava</h3>
-                            <p className="text-muted-foreground font-medium max-w-md">Sincronize suas atividades e acompanhe o desgaste dos seus componentes automaticamente.</p>
-                        </div>
-                    </div>
-                    <Button
-                        onClick={handleConnectStrava}
-                        className="bg-primary hover:bg-primary/90 text-white gap-2 shrink-0 h-12 px-8 font-bold shadow-glow hover:scale-105 transition-all duration-300"
-                    >
-                        Conectar Agora <ChevronRight className="h-5 w-5" />
-                    </Button>
-                </CardContent>
-                {/* Decorative gradients */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-32 translate-x-32 pointer-events-none blur-3xl" />
-                <div className="absolute bottom-0 left-1/4 w-32 h-32 bg-secondary/5 rounded-full translate-y-16 pointer-events-none blur-2xl" />
-            </Card>
+                        <Button
+                            onClick={handleConnectStrava}
+                            className="bg-primary hover:bg-primary/90 text-white gap-2 shrink-0 h-12 px-8 font-bold shadow-glow hover:scale-105 transition-all duration-300"
+                        >
+                            Conectar Agora <ChevronRight className="h-5 w-5" />
+                        </Button>
+                    </CardContent>
+                    {/* Decorative gradients */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-32 translate-x-32 pointer-events-none blur-3xl" />
+                    <div className="absolute bottom-0 left-1/4 w-32 h-32 bg-secondary/5 rounded-full translate-y-16 pointer-events-none blur-2xl" />
+                </Card>
+            )}
 
             {/* Maintenance Alerts */}
             {bikes.some(bike => {
