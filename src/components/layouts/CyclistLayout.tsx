@@ -1,4 +1,4 @@
-import { useAuth } from "@/contexts/AuthContext";
+﻿import { useAuth } from "@/contexts/AuthContext";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,52 +28,63 @@ export default function CyclistLayout() {
         { icon: LayoutDashboard, label: "Painel", path: "/dashboard" },
         { icon: Bike, label: "Minhas Bikes", path: "/dashboard/bikes" },
         { icon: Activity, label: "Atividades", path: "/dashboard/activities" },
-        { icon: Wrench, label: "Manutenções", path: "/dashboard/maintenance" },
+        { icon: Wrench, label: "ManutenÃ§Ãµes", path: "/dashboard/maintenance" },
         { icon: Search, label: "Procurar Oficinas", path: "/dashboard/search" },
-        { icon: Settings, label: "Configurações", path: "/dashboard/settings" },
+        { icon: Settings, label: "ConfiguraÃ§Ãµes", path: "/dashboard/settings" },
     ];
 
     return (
-        <div className="min-h-screen flex bg-gray-50">
+        <div className="min-h-screen flex bg-background">
             {/* Sidebar */}
-            <aside className="w-64 bg-[#1a1c1e] text-white flex flex-col hidden md:flex">
-                <div className="p-6">
-                    <h1 className="text-2xl font-bold text-emerald-500 tracking-tight italic">Rota Certa</h1>
+            <aside className="w-64 bg-card border-r border-white/10 flex flex-col hidden md:flex relative overflow-hidden group">
+                {/* Decorative background gradient */}
+                <div className="absolute top-0 right-0 w-32 h-64 bg-primary/5 rounded-full blur-3xl -translate-y-16 translate-x-16 pointer-events-none" />
+
+                <div className="p-8">
+                    <h1 className="text-3xl font-extrabold tracking-tighter italic text-gradient">Pelotão.io</h1>
                 </div>
 
-                <nav className="flex-1 px-4 space-y-1">
+                <nav className="flex-1 px-4 py-2 space-y-2 relative z-10">
                     {menuItems.map((item) => (
                         <Link key={item.path} to={item.path}>
                             <Button
                                 variant="ghost"
-                                className={`w-full justify-start text-gray-400 hover:text-white hover:bg-white/10 ${isActive(item.path) ? "bg-white/10 text-emerald-500 hover:text-emerald-500" : ""
+                                className={`w-full justify-start h-12 gap-3 font-bold transition-all duration-300 rounded-xl group/btn ${isActive(item.path)
+                                        ? "bg-primary/10 text-primary shadow-glow border border-primary/20"
+                                        : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
                                     }`}
                             >
-                                <item.icon className={`mr-3 h-5 w-5 ${isActive(item.path) ? "text-emerald-500" : ""}`} />
+                                <div className={`p-2 rounded-lg transition-all duration-300 ${isActive(item.path) ? "bg-primary text-white" : "bg-muted group-hover/btn:bg-white/10"
+                                    }`}>
+                                    <item.icon className="h-5 w-5" />
+                                </div>
                                 {item.label}
+                                {isActive(item.path) && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
                             </Button>
                         </Link>
                     ))}
                 </nav>
 
                 {/* User Profile Footer */}
-                <div className="p-4 mt-auto border-t border-white/10">
-                    <div className="flex items-center gap-3 mb-4 px-2">
-                        <div className="h-10 w-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-500">
-                            <UserCircle className="h-6 w-6" />
+                <div className="p-6 mt-auto border-t border-white/10 bg-muted/30 backdrop-blur-sm relative z-10">
+                    <div className="flex items-center gap-4 mb-6 px-1">
+                        <div className="h-12 w-12 rounded-2xl gradient-primary flex items-center justify-center text-white shadow-glow shrink-0 rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                            <UserCircle className="h-7 w-7" />
                         </div>
                         <div className="flex-1 overflow-hidden">
-                            <p className="text-sm font-medium truncate">{user?.user_metadata?.full_name || "Usuário"}</p>
-                            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                            <p className="text-base font-bold truncate group-hover:text-primary transition-colors">{user?.user_metadata?.full_name || "Atleta"}</p>
+                            <p className="text-xs text-muted-foreground font-medium truncate">{user?.email}</p>
                         </div>
                     </div>
                     <Button
                         variant="ghost"
-                        className="w-full justify-start text-gray-400 hover:text-red-400 hover:bg-red-400/10 transition-colors"
+                        className="w-full justify-start h-11 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-300 rounded-xl font-bold gap-3"
                         onClick={handleLogout}
                     >
-                        <LogOut className="mr-3 h-5 w-5" />
-                        Sair
+                        <div className="p-2 rounded-lg bg-muted text-muted-foreground transition-all duration-300 group-hover:bg-destructive/10">
+                            <LogOut className="h-5 w-5" />
+                        </div>
+                        Sair do App
                     </Button>
                 </div>
             </aside>

@@ -146,7 +146,7 @@ export default function Maintenance() {
                         </div>
                         <h3 className="text-lg font-semibold text-slate-900">Nenhuma manutenção encontrada</h3>
                         <p className="text-slate-500 max-w-[300px] mt-1 mb-6">
-                            Você ainda não realizou agendamentos pelo Rota Certa.
+                            Você ainda não realizou agendamentos pelo Pelot�o.io.
                         </p>
                         <Button className="bg-emerald-600 hover:bg-emerald-700">Explorar Oficinas</Button>
                     </CardContent>

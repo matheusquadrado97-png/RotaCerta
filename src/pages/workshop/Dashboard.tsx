@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -81,7 +81,7 @@ export default function WorkshopDashboard() {
                     .insert({
                         owner_id: user.id,
                         name: "Minha Oficina",
-                        address: "Endereço não informado"
+                        address: "EndereÃ§o nÃ£o informado"
                     })
                     .select()
                     .single();
@@ -195,7 +195,7 @@ export default function WorkshopDashboard() {
             if (error) throw error;
 
             setSettings({ ...settings, is_visible: newVisibility });
-            toast.success(newVisibility ? "Oficina agora está visível!" : "Oficina ocultada com sucesso.");
+            toast.success(newVisibility ? "Oficina agora estÃ¡ visÃ­vel!" : "Oficina ocultada com sucesso.");
         } catch (err: any) {
             toast.error("Erro ao alterar visibilidade: " + err.message);
         }
@@ -212,7 +212,7 @@ export default function WorkshopDashboard() {
             case 'in_progress':
                 return { label: 'Em andamento', color: 'text-amber-600 bg-amber-50 border-amber-100', icon: Clock };
             case 'awaiting_parts':
-                return { label: 'Aguardando peças', color: 'text-purple-600 bg-purple-50 border-purple-100', icon: AlertCircle };
+                return { label: 'Aguardando peÃ§as', color: 'text-purple-600 bg-purple-50 border-purple-100', icon: AlertCircle };
             case 'completed':
                 return { label: 'Finalizada', color: 'text-emerald-600 bg-emerald-50 border-emerald-100', icon: CheckCircle2 };
             case 'paused':
@@ -232,16 +232,16 @@ export default function WorkshopDashboard() {
 
     const isOffboarded = !settings?.is_visible;
     const missingItems = [
-        { label: "Cadastrar ao menos um serviço", done: services.length > 0 },
-        { label: "Configurar endereço", done: !!workshop?.address },
-        { label: "Adicionar usuários com permissão", done: staff.length > 0 },
+        { label: "Cadastrar ao menos um serviÃ§o", done: services.length > 0 },
+        { label: "Configurar endereÃ§o", done: !!workshop?.address },
+        { label: "Adicionar usuÃ¡rios com permissÃ£o", done: staff.length > 0 },
     ];
 
     const stats = [
         { label: "Agendadas", value: statusCounts.scheduled + statusCounts.pending, icon: Calendar, color: "text-blue-600", bg: "bg-blue-50" },
         { label: "Recebidas", value: statusCounts.received + statusCounts.confirmed, icon: Package, color: "text-indigo-600", bg: "bg-indigo-50" },
         { label: "Em andamento", value: statusCounts.in_progress, icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
-        { label: "Aguardando peças", value: statusCounts.awaiting_parts, icon: AlertCircle, color: "text-purple-600", bg: "bg-purple-50" },
+        { label: "Aguardando peÃ§as", value: statusCounts.awaiting_parts, icon: AlertCircle, color: "text-purple-600", bg: "bg-purple-50" },
         { label: "Finalizadas", value: statusCounts.completed, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
         { label: "Pausadas", value: statusCounts.paused, icon: PauseCircle, color: "text-slate-600", bg: "bg-slate-50" },
     ];
@@ -254,14 +254,14 @@ export default function WorkshopDashboard() {
             {/* Header Section */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Olá, {workshop?.name || "Oficina"}!</h1>
-                    <p className="text-slate-500 mt-1">Aqui está o que está acontecendo na sua oficina hoje.</p>
+                    <h1 className="text-4xl font-black tracking-tight text-foreground">Olâ, <span className="text-gradient">{workshop?.name || "Oficina"}</span>!</h1>
+                    <p className="text-muted-foreground mt-2 font-medium">Aqui està o que està acontecendo na sua oficina hoje.</p>
                 </div>
-                <div className="flex items-center gap-2 bg-white p-1 rounded-lg border border-slate-200 shadow-sm">
+                <div className="flex items-center gap-1 bg-muted/30 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 shadow-lg">
                     <Button
                         variant="ghost"
                         size="sm"
-                        className={`${timeFilter === 'today' ? 'bg-slate-100 font-semibold' : 'text-slate-500'}`}
+                        className={`rounded-xl px-5 h-9 font-bold transition-all ${timeFilter === 'today' ? 'bg-primary text-white shadow-glow' : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
                         onClick={() => setTimeFilter('today')}
                     >
                         Hoje
@@ -269,7 +269,7 @@ export default function WorkshopDashboard() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className={`${timeFilter === 'late' ? 'bg-slate-100 font-semibold' : 'text-slate-500'}`}
+                        className={`rounded-xl px-5 h-9 font-bold transition-all ${timeFilter === 'late' ? 'bg-primary text-white shadow-glow' : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
                         onClick={() => setTimeFilter('late')}
                     >
                         Atrasadas
@@ -277,7 +277,7 @@ export default function WorkshopDashboard() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        className={`${timeFilter === 'all' ? 'bg-slate-100 font-semibold' : 'text-slate-500'}`}
+                        className={`rounded-xl px-5 h-9 font-bold transition-all ${timeFilter === 'all' ? 'bg-primary text-white shadow-glow' : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
                         onClick={() => setTimeFilter('all')}
                     >
                         Todas
@@ -294,10 +294,10 @@ export default function WorkshopDashboard() {
                     <CardHeader>
                         <div className="flex items-center gap-2 text-emerald-800 mb-1">
                             <AlertCircle className="h-5 w-5 fill-emerald-100" />
-                            <CardTitle className="text-lg">Sua oficina ainda não está visível para os ciclistas</CardTitle>
+                            <CardTitle className="text-lg">Sua oficina ainda nÃ£o estÃ¡ visÃ­vel para os ciclistas</CardTitle>
                         </div>
                         <CardDescription className="text-emerald-700/80">
-                            Para ativar a visibilidade e começar a receber agendamentos via Rota Certa, complete os itens abaixo:
+                            Para ativar a visibilidade e comeÃ§ar a receber agendamentos via Pelotão.io, complete os itens abaixo:
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -337,72 +337,75 @@ export default function WorkshopDashboard() {
             )}
 
             {/* OS Counters Grid */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                 {stats.map((stat, i) => (
-                    <Card key={i} className="group hover:border-emerald-200 transition-all cursor-pointer hover:shadow-md active:scale-95 duration-200" onClick={() => navigate('/workshop/appointments')}>
-                        <CardHeader className="p-4 pb-2 space-y-0 flex flex-row items-center justify-between">
-                            <div className={`${stat.bg} ${stat.color} p-2 rounded-lg`}>
-                                <stat.icon className="h-4 w-4" />
+                    <Card key={i} className="group hover:border-primary/30 transition-all cursor-pointer hover:shadow-2xl active:scale-95 duration-300 rounded-3xl bg-card/40 backdrop-blur-xl border-white/10 overflow-hidden relative" onClick={() => navigate('/workshop/appointments')}>
+                        <div className="absolute top-0 right-0 w-20 h-20 gradient-primary opacity-0 group-hover:opacity-10 blur-2xl transition-opacity pointer-events-none" />
+                        <CardHeader className="p-5 pb-2 space-y-0 flex flex-row items-center justify-between">
+                            <div className={`p-3 rounded-2xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6 shadow-glow-sm ${stat.bg} ${stat.color}`}>
+                                <stat.icon className="h-5 w-5" />
                             </div>
-                            <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-none group-hover:bg-emerald-50 group-hover:text-emerald-600">
+                            <Badge variant="secondary" className="bg-muted/50 text-muted-foreground border-white/5 group-hover:bg-primary/20 group-hover:text-primary font-bold px-3 py-1 rounded-full transition-colors">
                                 Ver
                             </Badge>
                         </CardHeader>
-                        <CardContent className="p-4 pt-0">
-                            <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                            <p className="text-xs font-medium text-slate-500 mt-0.5">{stat.label}</p>
+                        <CardContent className="p-5 pt-0">
+                            <div className="text-3xl font-black text-foreground mt-2">{stat.value}</div>
+                            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1 opacity-70">{stat.label}</p>
                         </CardContent>
                     </Card>
                 ))}
             </div>
 
             {/* Bottom Section */}
-            <div className="grid gap-6 lg:grid-cols-3">
-                <Card className="lg:col-span-2">
-                    <CardHeader className="flex flex-row items-center justify-between">
+            <div className="grid gap-8 lg:grid-cols-3">
+                <Card className="lg:col-span-2 rounded-3xl bg-card border-white/10 shadow-xl overflow-hidden">
+                    <CardHeader className="flex flex-row items-center justify-between border-b border-white/5 px-8 py-6">
                         <div>
-                            <CardTitle className="text-lg">Atividade Recente</CardTitle>
-                            <CardDescription>Ultimas atualizações de ordens de serviço.</CardDescription>
+                            <CardTitle className="text-xl font-black">Atividade Recente</CardTitle>
+                            <CardDescription className="font-medium text-muted-foreground">Ultimas atualizações de ordens de serviço.</CardDescription>
                         </div>
-                        <Button variant="ghost" size="sm" className="text-emerald-600" onClick={() => navigate('/workshop/appointments')}>Ver tudo</Button>
+                        <Button variant="ghost" size="sm" className="text-primary font-bold hover:bg-primary/10 rounded-xl px-4" onClick={() => navigate('/workshop/appointments')}>Ver tudo</Button>
                     </CardHeader>
-                    <CardContent className={recentActivity.length === 0 ? "h-[300px] flex flex-col items-center justify-center text-center" : "p-0"}>
+                    <CardContent className={recentActivity.length === 0 ? "h-[350px] flex flex-col items-center justify-center text-center p-8" : "p-0"}>
                         {recentActivity.length === 0 ? (
                             <>
-                                <div className="bg-slate-50 p-4 rounded-full mb-4">
-                                    <Package className="h-8 w-8 text-slate-300" />
+                                <div className="gradient-primary p-6 rounded-3xl mb-6 shadow-glow rotate-6 animate-float">
+                                    <Package className="h-10 w-10 text-white" />
                                 </div>
-                                <p className="text-slate-500 font-medium">Nenhuma atividade registrada hoje.</p>
-                                <p className="text-xs text-slate-400 mt-1">As OS aparecerão aqui conforme forem atualizadas.</p>
+                                <p className="text-foreground font-black text-lg">Nenhuma atividade hoje</p>
+                                <p className="text-sm text-muted-foreground mt-2 font-medium max-w-[250px]">As OS aparecerão aqui conforme forem atualizadas.</p>
                             </>
                         ) : (
-                            <div className="divide-y divide-slate-100">
+                            <div className="divide-y divide-white/5">
                                 {recentActivity.map((act) => {
                                     const config = getStatusConfig(act.status);
                                     return (
-                                        <div key={act.id} className="p-4 hover:bg-slate-50 transition-colors flex items-center justify-between group cursor-pointer" onClick={() => navigate('/workshop/appointments')}>
-                                            <div className="flex items-center gap-4">
-                                                <div className={`${config.bg} ${config.color} p-2.5 rounded-full`}>
-                                                    <config.icon className="h-5 w-5" />
+                                        <div key={act.id} className="p-6 hover:bg-white/[0.02] transition-colors flex items-center justify-between group cursor-pointer" onClick={() => navigate('/workshop/appointments')}>
+                                            <div className="flex items-center gap-5">
+                                                <div className={`${config.bg} ${config.color} p-3 rounded-2xl shadow-glow-sm group-hover:scale-110 transition-transform duration-300`}>
+                                                    <config.icon className="h-6 w-6" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-slate-900">{act.service?.name || "Serviço"}</p>
-                                                    <div className="flex items-center gap-2 mt-0.5">
-                                                        <span className="text-xs text-slate-400 flex items-center gap-1">
-                                                            <User className="h-3 w-3" /> {act.cyclist?.full_name}
+                                                    <p className="font-black text-foreground text-base group-hover:text-primary transition-colors">{act.service?.name || "Serviço"}</p>
+                                                    <div className="flex items-center gap-3 mt-1.5 font-medium">
+                                                        <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                                            <User className="h-3.5 w-3.5" /> {act.cyclist?.full_name}
                                                         </span>
-                                                        <span className="text-xs text-slate-300">•</span>
-                                                        <span className="text-xs text-slate-400 flex items-center gap-1">
-                                                            <Clock className="h-3 w-3" /> {formatDistanceToNow(new Date(act.created_at), { addSuffix: true, locale: ptBR })}
+                                                        <span className="text-xs text-white/10">•</span>
+                                                        <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                                                            <Clock className="h-3.5 w-3.5" /> {formatDistanceToNow(new Date(act.created_at), { addSuffix: true, locale: ptBR })}
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="flex items-center gap-3">
-                                                <Badge className={`${config.color} border shadow-none bg-transparent font-semibold`}>
+                                            <div className="flex items-center gap-4">
+                                                <Badge className={`${config.color} border-white/5 shadow-glow-sm bg-background/50 backdrop-blur-sm font-black px-4 py-1.5 rounded-full`}>
                                                     {config.label}
                                                 </Badge>
-                                                <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-emerald-500 transition-colors" />
+                                                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-muted/50 group-hover:bg-primary/20 transition-all">
+                                                    <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                                </div>
                                             </div>
                                         </div>
                                     );
@@ -412,31 +415,42 @@ export default function WorkshopDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-lg">Capacidade Diária</CardTitle>
-                        <CardDescription>Ocupação atual da oficina.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="text-center py-4">
-                            <div className="text-3xl font-bold text-slate-900">{todayCount} / {maxDaily}</div>
-                            <p className="text-sm text-slate-500 font-medium">Slots ocupados hoje</p>
-                        </div>
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-xs font-semibold text-slate-600">
-                                <span>Utilização</span>
-                                <span>{capacityPercentage}%</span>
+                <div className="space-y-8">
+                    <Card className="rounded-3xl bg-card border-white/10 shadow-xl overflow-hidden relative group">
+                        <div className="absolute inset-0 gradient-primary opacity-0 group-hover:opacity-[0.03] transition-opacity pointer-events-none" />
+                        <CardHeader className="px-8 py-6 border-b border-white/5">
+                            <CardTitle className="text-xl font-black">Capacidade Diária</CardTitle>
+                            <CardDescription className="font-medium">Ocupação atual da oficina.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="px-8 py-8 space-y-8">
+                            <div className="text-center relative py-4">
+                                <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full scale-150 pointer-events-none" />
+                                <div className="text-5xl font-black text-foreground relative tracking-tighter">
+                                    {todayCount} <span className="text-muted-foreground/30 font-light">/</span> {maxDaily}
+                                </div>
+                                <p className="text-sm text-muted-foreground font-bold uppercase tracking-widest mt-2">Slots ocupados hoje</p>
                             </div>
-                            <Progress value={capacityPercentage} className={`h-2 ${capacityPercentage > 90 ? 'bg-red-100' : 'bg-emerald-100'}`} />
-                        </div>
-                        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3">
-                            <AlertCircle className="h-5 w-5 text-blue-600 shrink-0" />
-                            <p className="text-xs text-blue-800 leading-relaxed font-medium">
-                                Você pode alterar sua capacidade máxima nas configurações da empresa.
-                            </p>
-                        </div>
-                    </CardContent>
-                </Card>
+                            <div className="space-y-3">
+                                <div className="flex justify-between text-xs font-black uppercase tracking-widest text-muted-foreground">
+                                    <span>Utilização</span>
+                                    <span className={capacityPercentage > 90 ? 'text-destructive' : 'text-primary'}>{capacityPercentage}%</span>
+                                </div>
+                                <div className="h-3 w-full bg-muted rounded-full overflow-hidden p-0.5 border border-white/5">
+                                    <div
+                                        className={`h-full rounded-full transition-all duration-1000 shadow-glow-sm ${capacityPercentage > 90 ? 'bg-destructive' : 'gradient-primary'}`}
+                                        style={{ width: `${capacityPercentage}%` }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="bg-primary/5 border border-primary/10 rounded-2xl p-5 flex gap-4 backdrop-blur-sm group-hover:bg-primary/10 transition-colors">
+                                <AlertCircle className="h-6 w-6 text-primary shrink-0" />
+                                <p className="text-xs text-foreground/80 leading-relaxed font-bold italic">
+                                    Você pode alterar sua capacidade máxima nas configurações da empresa.
+                                </p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
         </div>
     );

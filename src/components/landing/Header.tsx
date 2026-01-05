@@ -22,7 +22,7 @@ export const Header = () => {
             <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center">
               <Bike className="w-6 h-6 text-primary-foreground" />
             </div>
-            <span className="font-display font-bold text-xl">BikeSync</span>
+            <span className="font-display font-bold text-xl">Pelotão.io</span>
           </a>
 
           {/* Desktop Navigation */}

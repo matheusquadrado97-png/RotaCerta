@@ -125,7 +125,7 @@ export const WorkshopCTASection = () => {
                 </div>
                 <div>
                   <p className="font-semibold text-sm text-foreground">Novo agendamento!</p>
-                  <p className="text-muted-foreground text-xs">Via app Rota Certa</p>
+                  <p className="text-muted-foreground text-xs">Via app Pelotão.io</p>
                 </div>
               </div>
             </div>

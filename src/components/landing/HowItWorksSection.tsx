@@ -4,7 +4,7 @@ const steps = [
   {
     number: "01",
     title: "Conecte seu Strava",
-    description: "Faça login com sua conta Strava e autorize o Rota Certa a acessar suas atividades. É rápido e seguro."
+    description: "Faça login com sua conta Strava e autorize o Pelot�o.io a acessar suas atividades. É rápido e seguro."
   },
   {
     number: "02",
@@ -14,7 +14,7 @@ const steps = [
   {
     number: "03",
     title: "Pedale normalmente",
-    description: "Continue suas atividades normalmente. O Rota Certa monitora o desgaste automaticamente em background."
+    description: "Continue suas atividades normalmente. O Pelot�o.io monitora o desgaste automaticamente em background."
   },
   {
     number: "04",

@@ -100,7 +100,7 @@ export default function Auth() {
                     <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow animate-float">
                         <Bike className="w-10 h-10 text-primary-foreground" />
                     </div>
-                    <CardTitle className="text-3xl font-extrabold tracking-tight text-gradient">Rota Certa</CardTitle>
+                    <CardTitle className="text-3xl font-extrabold tracking-tight text-gradient">Pelotão.io</CardTitle>
                     <CardDescription className="text-muted-foreground font-medium">Sua jornada comeÃ§a aqui</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -183,7 +183,7 @@ export default function Auth() {
                                 </div>
 
                                 <div className="space-y-3 pt-2">
-                                    <Label className="text-sm font-semibold">Como vocÃª vai usar o Rota Certa?</Label>
+                                    <Label className="text-sm font-semibold">Como vocÃª vai usar o Pelotão.io?</Label>
                                     <RadioGroup defaultValue="cyclist" value={role} onValueChange={(v) => setRole(v as "cyclist" | "workshop_owner")} className="grid grid-cols-2 gap-4">
                                         <div className="flex items-center space-x-2 border border-white/30 bg-white/20 p-3 rounded-xl cursor-pointer hover:bg-white/40 transition-all duration-300">
                                             <RadioGroupItem value="cyclist" id="r-cyclist" />

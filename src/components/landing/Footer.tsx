@@ -46,7 +46,7 @@ export const Footer = () => {
               <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center">
                 <Bike className="w-6 h-6 text-primary-foreground" />
               </div>
-              <span className="font-display font-bold text-xl">Rota Certa</span>
+              <span className="font-display font-bold text-xl">Pelot�o.io</span>
             </Link>
             <p className="text-secondary-foreground/70 mb-6 max-w-xs">
               A plataforma que conecta ciclistas e oficinas para uma experiência de manutenção mais inteligente.
@@ -129,7 +129,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-secondary-foreground/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-secondary-foreground/60 text-sm">
-            © 2024 Rota Certa. Todos os direitos reservados.
+            © 2024 Pelot�o.io. Todos os direitos reservados.
           </p>
           <div className="flex items-center gap-2">
             <span className="text-secondary-foreground/60 text-sm">Powered by</span>
