@@ -8,209 +8,192 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Bike, Wrench, Loader2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
-import { Loader2, Bike } from "lucide-react";
-import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Auth() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [fullName, setFullName] = useState("");
-    const [role, setRole] = useState<"cyclist" | "workshop_owner">("cyclist");
-    const [loading, setLoading] = useState(false);
     const { session } = useAuth();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [userType, setUserType] = useState<"cyclist" | "workshop">("cyclist");
 
-    usePageTitle("Entrar");
-
-    // Redirect if already logged in
     useEffect(() => {
         if (session) {
-            const userRole = session.user.user_metadata?.role;
-            if (userRole === "workshop_owner") {
-                navigate("/workshop");
-            } else {
-                navigate("/dashboard");
-            }
+            navigate("/dashboard");
         }
     }, [session, navigate]);
 
-    const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleAuth = async (mode: "login" | "register") => {
         setLoading(true);
         try {
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
-
-            if (error) throw error;
-            toast.success("Login realizado com sucesso!");
-
-            // Check metadata to redirect correctly
-            const { data: { user } } = await supabase.auth.getUser();
-            const userRole = user?.user_metadata?.role;
-
-            if (userRole === "workshop_owner") {
-                navigate("/workshop");
+            if (mode === "login") {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+                if (error) throw error;
             } else {
-                navigate("/dashboard");
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            user_type: userType,
+                        },
+                    },
+                });
+                if (error) throw error;
+                if (data.user && data.user.identities && data.user.identities.length === 0) {
+                    toast.error("Este email já está em uso.");
+                    return;
+                }
+                toast.success("Conta criada com sucesso! Verifique seu email.");
             }
         } catch (error: any) {
-            toast.error(error.message || "Erro ao fazer login");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleRegister = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-            const { error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    data: {
-                        full_name: fullName,
-                        role: role
-                    },
-                },
-            });
-
-            if (error) throw error;
-            toast.success("Cadastro realizado! Verifique seu email.");
-        } catch (error: any) {
-            toast.error(error.message || "Erro ao cadastrar");
+            toast.error(error.message);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center gradient-hero px-4 relative overflow-hidden">
-            {/* Background decorative elements */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-slow" />
-                <div className="absolute bottom-20 -left-20 w-72 h-72 bg-secondary/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
-            </div>
+        <div className="min-h-screen bg-background flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Background Effects */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background z-0" />
+            <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] z-0 animate-pulse-slow" />
+            <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] z-0" />
 
-            <Card className="w-full max-w-md bg-white/40 backdrop-blur-xl border-white/20 shadow-2xl relative z-10 animate-slide-up">
-                <CardHeader className="text-center pb-2">
-                    <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow animate-float">
-                        <Bike className="w-10 h-10 text-primary-foreground" />
-                    </div>
-                    <CardTitle className="text-3xl font-extrabold tracking-tight text-gradient">Pelot�o.io</CardTitle>
-                    <CardDescription className="text-muted-foreground font-medium">Sua jornada começa aqui</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Tabs defaultValue="login" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2 mb-8 bg-muted/50 p-1">
-                            <TabsTrigger value="login" className="rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm">Entrar</TabsTrigger>
-                            <TabsTrigger value="register" className="rounded-lg transition-all duration-300 data-[state=active]:bg-white data-[state=active]:shadow-sm">Criar conta</TabsTrigger>
-                        </TabsList>
+            <div className="w-full max-w-md z-10 animate-in fade-in zoom-in duration-500">
+                <div className="text-center mb-8">
+                    <h1 className="text-4xl font-black tracking-tight mb-2 flex items-center justify-center gap-2">
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-emerald-400">Pelotão</span>
+                        <span className="text-foreground">.io</span>
+                    </h1>
+                    <p className="text-muted-foreground">Sua jornada, nossa paixão.</p>
+                </div>
 
-                        <TabsContent value="login">
-                            <form onSubmit={handleLogin} className="space-y-6">
+                <Tabs defaultValue="login" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 mb-6 bg-muted/50 backdrop-blur p-1 rounded-xl">
+                        <TabsTrigger value="login" className="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold transition-all">Entrar</TabsTrigger>
+                        <TabsTrigger value="register" className="rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm font-bold transition-all">Cadastrar</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="login">
+                        <Card className="border-white/10 bg-card/40 backdrop-blur-xl shadow-2xl">
+                            <CardHeader>
+                                <CardTitle>Bem-vindo de volta</CardTitle>
+                                <CardDescription>Entre com suas credenciais para acessar sua conta.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="email-login" className="text-sm font-semibold">Email</Label>
+                                    <Label htmlFor="email">Email</Label>
                                     <Input
-                                        id="email-login"
+                                        id="email"
                                         type="email"
                                         placeholder="seu@email.com"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                        className="bg-white/50 border-white/30 focus:bg-white transition-all duration-300"
+                                        className="bg-muted/30 border-white/10 focus-visible:ring-primary/50"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <div className="flex items-center justify-between">
-                                        <Label htmlFor="password-login" className="text-sm font-semibold">Senha</Label>
-                                        <button type="button" className="text-xs text-primary hover:underline font-medium">Esqueceu a senha?</button>
-                                    </div>
+                                    <Label htmlFor="password">Senha</Label>
                                     <Input
-                                        id="password-login"
+                                        id="password"
                                         type="password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                        className="bg-white/50 border-white/30 focus:bg-white transition-all duration-300"
+                                        className="bg-muted/30 border-white/10 focus-visible:ring-primary/50"
                                     />
                                 </div>
-                                <Button type="submit" className="w-full h-12 text-base font-bold shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all duration-300" disabled={loading}>
-                                    {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
-                                    Entrar na Plataforma
+                            </CardContent>
+                            <CardFooter>
+                                <Button
+                                    className="w-full gradient-primary font-bold shadow-glow h-11"
+                                    onClick={() => handleAuth("login")}
+                                    disabled={loading}
+                                >
+                                    {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : <ArrowRight className="mr-2 h-4 w-4" />}
+                                    Entrar
                                 </Button>
-                            </form>
-                        </TabsContent>
+                            </CardFooter>
+                        </Card>
+                    </TabsContent>
 
-                        <TabsContent value="register">
-                            <form onSubmit={handleRegister} className="space-y-4">
+                    <TabsContent value="register">
+                        <Card className="border-white/10 bg-card/40 backdrop-blur-xl shadow-2xl">
+                            <CardHeader>
+                                <CardTitle>Crie sua conta</CardTitle>
+                                <CardDescription>Comece agora gratuitamente.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="fullname" className="text-sm font-semibold">Nome Completo</Label>
-                                    <Input
-                                        id="fullname"
-                                        placeholder="Seu Nome"
-                                        value={fullName}
-                                        onChange={(e) => setFullName(e.target.value)}
-                                        required
-                                        className="bg-white/50 border-white/30 focus:bg-white transition-all duration-300"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="email-register" className="text-sm font-semibold">Email</Label>
-                                    <Input
-                                        id="email-register"
-                                        type="email"
-                                        placeholder="seu@email.com"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                        className="bg-white/50 border-white/30 focus:bg-white transition-all duration-300"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="password-register" className="text-sm font-semibold">Senha</Label>
-                                    <Input
-                                        id="password-register"
-                                        type="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                        className="bg-white/50 border-white/30 focus:bg-white transition-all duration-300"
-                                    />
-                                </div>
-
-                                <div className="space-y-3 pt-2">
-                                    <Label className="text-sm font-semibold">Como você vai usar o Pelot�o.io?</Label>
-                                    <RadioGroup defaultValue="cyclist" value={role} onValueChange={(v) => setRole(v as "cyclist" | "workshop_owner")} className="grid grid-cols-2 gap-4">
-                                        <div className="flex items-center space-x-2 border border-white/30 bg-white/20 p-3 rounded-xl cursor-pointer hover:bg-white/40 transition-all duration-300">
-                                            <RadioGroupItem value="cyclist" id="r-cyclist" />
-                                            <Label htmlFor="r-cyclist" className="cursor-pointer font-medium">Ciclista</Label>
+                                    <Label>Eu sou...</Label>
+                                    <RadioGroup defaultValue="cyclist" onValueChange={(v: "cyclist" | "workshop") => setUserType(v)} className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <RadioGroupItem value="cyclist" id="cyclist" className="peer sr-only" />
+                                            <Label
+                                                htmlFor="cyclist"
+                                                className="flex flex-col items-center justify-between rounded-xl border-2 border-muted bg-muted/30 p-4 hover:bg-muted/50 hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:text-primary cursor-pointer transition-all text-center gap-2"
+                                            >
+                                                <Bike className="mb-2 h-6 w-6" />
+                                                Ciclista
+                                            </Label>
                                         </div>
-                                        <div className="flex items-center space-x-2 border border-white/30 bg-white/20 p-3 rounded-xl cursor-pointer hover:bg-white/40 transition-all duration-300">
-                                            <RadioGroupItem value="workshop_owner" id="r-owner" />
-                                            <Label htmlFor="r-owner" className="cursor-pointer font-medium">Oficina</Label>
+                                        <div>
+                                            <RadioGroupItem value="workshop" id="workshop" className="peer sr-only" />
+                                            <Label
+                                                htmlFor="workshop"
+                                                className="flex flex-col items-center justify-between rounded-xl border-2 border-muted bg-muted/30 p-4 hover:bg-muted/50 hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:text-primary cursor-pointer transition-all text-center gap-2"
+                                            >
+                                                <Wrench className="mb-2 h-6 w-6" />
+                                                Oficina
+                                            </Label>
                                         </div>
                                     </RadioGroup>
                                 </div>
-
-                                <Button type="submit" className="w-full h-12 text-base font-bold shadow-glow hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 mt-4" disabled={loading}>
-                                    {loading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
-                                    Criar Minha Conta
+                                <div className="space-y-2">
+                                    <Label htmlFor="reg-email">Email</Label>
+                                    <Input
+                                        id="reg-email"
+                                        type="email"
+                                        placeholder="seu@email.com"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        className="bg-muted/30 border-white/10 focus-visible:ring-primary/50"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="reg-password">Senha</Label>
+                                    <Input
+                                        id="reg-password"
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="bg-muted/30 border-white/10 focus-visible:ring-primary/50"
+                                    />
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button
+                                    className="w-full gradient-primary font-bold shadow-glow h-11"
+                                    onClick={() => handleAuth("register")}
+                                    disabled={loading}
+                                >
+                                    {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : <div className="flex items-center gap-2">Criar Conta</div>}
                                 </Button>
-                            </form>
-                        </TabsContent>
-                    </Tabs>
-                </CardContent>
-                <CardFooter className="flex flex-col items-center border-t border-white/10 pt-6">
-                    <p className="text-xs text-muted-foreground text-center">
-                        Ao continuar, você concorda com nossos <br />
-                        <span className="text-primary hover:underline cursor-pointer">Termos de Serviço</span> e <span className="text-primary hover:underline cursor-pointer">Política de Privacidade</span>.
-                    </p>
-                </CardFooter>
-            </Card>
+                            </CardFooter>
+                        </Card>
+                    </TabsContent>
+                </Tabs>
+
+                <p className="text-center text-xs text-muted-foreground mt-8 opacity-70">
+                    Ao continuar, você concorda com nossos <br />
+                    <span className="text-primary hover:underline cursor-pointer">Termos de Serviço</span> e <span className="text-primary hover:underline cursor-pointer">Política de Privacidade</span>.
+                </p>
+            </div>
         </div>
     );
 }
