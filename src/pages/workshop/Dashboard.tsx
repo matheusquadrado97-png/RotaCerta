@@ -81,7 +81,7 @@ export default function WorkshopDashboard() {
                     .insert({
                         owner_id: user.id,
                         name: "Minha Oficina",
-                        address: "EndereÃ§o nÃ£o informado"
+                        address: "Endereço não informado"
                     })
                     .select()
                     .single();
@@ -195,7 +195,7 @@ export default function WorkshopDashboard() {
             if (error) throw error;
 
             setSettings({ ...settings, is_visible: newVisibility });
-            toast.success(newVisibility ? "Oficina agora estÃ¡ visÃ­vel!" : "Oficina ocultada com sucesso.");
+            toast.success(newVisibility ? "Oficina agora está visível!" : "Oficina ocultada com sucesso.");
         } catch (err: any) {
             toast.error("Erro ao alterar visibilidade: " + err.message);
         }
@@ -205,20 +205,20 @@ export default function WorkshopDashboard() {
         switch (status) {
             case 'scheduled':
             case 'pending':
-                return { label: 'Agendada', color: 'text-blue-600 bg-blue-50 border-blue-100', icon: Calendar };
+                return { label: 'Agendada', color: 'text-blue-600', bg: 'bg-blue-50', icon: Calendar };
             case 'received':
             case 'confirmed':
-                return { label: 'Recebida', color: 'text-indigo-600 bg-indigo-50 border-indigo-100', icon: Package };
+                return { label: 'Recebida', color: 'text-indigo-600', bg: 'bg-indigo-50', icon: Package };
             case 'in_progress':
-                return { label: 'Em andamento', color: 'text-amber-600 bg-amber-50 border-amber-100', icon: Clock };
+                return { label: 'Em andamento', color: 'text-amber-600', bg: 'bg-amber-50', icon: Clock };
             case 'awaiting_parts':
-                return { label: 'Aguardando peÃ§as', color: 'text-purple-600 bg-purple-50 border-purple-100', icon: AlertCircle };
+                return { label: 'Aguardando peças', color: 'text-purple-600', bg: 'bg-purple-50', icon: AlertCircle };
             case 'completed':
-                return { label: 'Finalizada', color: 'text-emerald-600 bg-emerald-50 border-emerald-100', icon: CheckCircle2 };
+                return { label: 'Finalizada', color: 'text-emerald-600', bg: 'bg-emerald-50', icon: CheckCircle2 };
             case 'paused':
-                return { label: 'Pausada', color: 'text-slate-600 bg-slate-50 border-slate-100', icon: PauseCircle };
+                return { label: 'Pausada', color: 'text-slate-600', bg: 'bg-slate-50', icon: PauseCircle };
             default:
-                return { label: status, color: 'text-slate-600 bg-slate-50 border-slate-100', icon: Clock };
+                return { label: status, color: 'text-slate-600', bg: 'bg-slate-50', icon: Clock };
         }
     };
 
@@ -232,16 +232,16 @@ export default function WorkshopDashboard() {
 
     const isOffboarded = !settings?.is_visible;
     const missingItems = [
-        { label: "Cadastrar ao menos um serviÃ§o", done: services.length > 0 },
-        { label: "Configurar endereÃ§o", done: !!workshop?.address },
-        { label: "Adicionar usuÃ¡rios com permissÃ£o", done: staff.length > 0 },
+        { label: "Cadastrar ao menos um serviço", done: services.length > 0 },
+        { label: "Configurar endereço", done: !!workshop?.address },
+        { label: "Adicionar usuários com permissão", done: staff.length > 0 },
     ];
 
     const stats = [
         { label: "Agendadas", value: statusCounts.scheduled + statusCounts.pending, icon: Calendar, color: "text-blue-600", bg: "bg-blue-50" },
         { label: "Recebidas", value: statusCounts.received + statusCounts.confirmed, icon: Package, color: "text-indigo-600", bg: "bg-indigo-50" },
         { label: "Em andamento", value: statusCounts.in_progress, icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
-        { label: "Aguardando peÃ§as", value: statusCounts.awaiting_parts, icon: AlertCircle, color: "text-purple-600", bg: "bg-purple-50" },
+        { label: "Aguardando peças", value: statusCounts.awaiting_parts, icon: AlertCircle, color: "text-purple-600", bg: "bg-purple-50" },
         { label: "Finalizadas", value: statusCounts.completed, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
         { label: "Pausadas", value: statusCounts.paused, icon: PauseCircle, color: "text-slate-600", bg: "bg-slate-50" },
     ];
@@ -294,10 +294,10 @@ export default function WorkshopDashboard() {
                     <CardHeader>
                         <div className="flex items-center gap-2 text-emerald-800 mb-1">
                             <AlertCircle className="h-5 w-5 fill-emerald-100" />
-                            <CardTitle className="text-lg">Sua oficina ainda nÃ£o estÃ¡ visÃ­vel para os ciclistas</CardTitle>
+                            <CardTitle className="text-lg">Sua oficina ainda não está visível para os ciclistas</CardTitle>
                         </div>
                         <CardDescription className="text-emerald-700/80">
-                            Para ativar a visibilidade e comeÃ§ar a receber agendamentos via Pelotão.io, complete os itens abaixo:
+                            Para ativar a visibilidade e começar a receber agendamentos via Pelotão.io, complete os itens abaixo:
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">

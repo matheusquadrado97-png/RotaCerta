@@ -9,11 +9,15 @@ import {
     Settings,
     LogOut,
     UserCircle,
-    Search
+    Search,
+    Moon,
+    Sun
 } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 export default function CyclistLayout() {
     const { user, signOut } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -28,9 +32,9 @@ export default function CyclistLayout() {
         { icon: LayoutDashboard, label: "Painel", path: "/dashboard" },
         { icon: Bike, label: "Minhas Bikes", path: "/dashboard/bikes" },
         { icon: Activity, label: "Atividades", path: "/dashboard/activities" },
-        { icon: Wrench, label: "ManutenÃ§Ãµes", path: "/dashboard/maintenance" },
+        { icon: Wrench, label: "Manutenções", path: "/dashboard/maintenance" },
         { icon: Search, label: "Procurar Oficinas", path: "/dashboard/search" },
-        { icon: Settings, label: "ConfiguraÃ§Ãµes", path: "/dashboard/settings" },
+        { icon: Settings, label: "Configurações", path: "/dashboard/settings" },
     ];
 
     return (
@@ -50,8 +54,8 @@ export default function CyclistLayout() {
                             <Button
                                 variant="ghost"
                                 className={`w-full justify-start h-12 gap-3 font-bold transition-all duration-300 rounded-xl group/btn ${isActive(item.path)
-                                        ? "bg-primary/10 text-primary shadow-glow border border-primary/20"
-                                        : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                                    ? "bg-primary/10 text-primary shadow-glow border border-primary/20"
+                                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
                                     }`}
                             >
                                 <div className={`p-2 rounded-lg transition-all duration-300 ${isActive(item.path) ? "bg-primary text-white" : "bg-muted group-hover/btn:bg-white/10"
@@ -85,6 +89,19 @@ export default function CyclistLayout() {
                             <LogOut className="h-5 w-5" />
                         </div>
                         Sair do App
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="w-full h-11 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
+                        onClick={toggleTheme}
+                        title={theme === "dark" ? "Modo Claro" : "Modo Escuro"}
+                    >
+                        {theme === "dark" ? (
+                            <Sun className="h-5 w-5" />
+                        ) : (
+                            <Moon className="h-5 w-5" />
+                        )}
                     </Button>
                 </div>
             </aside>

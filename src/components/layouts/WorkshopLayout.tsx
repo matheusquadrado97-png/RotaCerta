@@ -14,8 +14,11 @@ import {
     Building2,
     CheckCircle2,
     UserCircle,
-    Boxes
+    Boxes,
+    Moon,
+    Sun
 } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeProvider";
 import { Input } from "@/components/ui/input";
 import {
     DropdownMenu,
@@ -30,6 +33,7 @@ import { toast } from "sonner";
 
 export default function WorkshopLayout() {
     const { signOut, user } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -38,7 +42,7 @@ export default function WorkshopLayout() {
     const navItems = [
         { label: "Dashboard", icon: LayoutDashboard, path: "/workshop" },
         { label: "Agenda", icon: Calendar, path: "/workshop/appointments" },
-        { label: "ServiÃ§os", icon: Wrench, path: "/workshop/services" },
+        { label: "Serviços", icon: Wrench, path: "/workshop/services" },
         { label: "Estoque", icon: Boxes, path: "/workshop/products" },
         { label: "Empresa", icon: Building2, path: "/workshop/company" },
     ];
@@ -48,11 +52,11 @@ export default function WorkshopLayout() {
     };
 
     const handleNotifications = () => {
-        toast.info("VocÃª nÃ£o tem novas notificaÃ§Ãµes no momento.");
+        toast.info("Você não tem novas notificações no momento.");
     };
 
     const handleProfileClick = () => {
-        toast.info("ConfiguraÃ§Ãµes de perfil em desenvolvimento.");
+        toast.info("Configurações de perfil em desenvolvimento.");
     };
 
     const handleSettingsClick = () => {
@@ -150,6 +154,22 @@ export default function WorkshopLayout() {
                                 <span className="absolute top-2.5 right-2.5 h-2.5 w-2.5 bg-destructive rounded-full border-2 border-background shadow-glow-sm" />
                             </Button>
                         </div>
+
+                        <div className="h-8 w-[1px] bg-white/10 mx-1" />
+
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-10 w-10 text-muted-foreground hover:bg-white/5 rounded-xl transition-all"
+                            onClick={toggleTheme}
+                            title={theme === "dark" ? "Modo Claro" : "Modo Escuro"}
+                        >
+                            {theme === "dark" ? (
+                                <Sun className="h-5 w-5" />
+                            ) : (
+                                <Moon className="h-5 w-5" />
+                            )}
+                        </Button>
 
                         <div className="h-8 w-[1px] bg-white/10 mx-1" />
 

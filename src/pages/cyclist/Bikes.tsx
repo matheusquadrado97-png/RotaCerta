@@ -13,11 +13,24 @@ import {
     DialogTrigger,
     DialogFooter
 } from "@/components/ui/dialog";
-import { Bike, Plus, MapPin, Loader2, Activity } from "lucide-react";
+import { Bike, Plus, MapPin, Loader2, Activity, Trash2, ChevronRight, Wrench } from "lucide-react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
 import { Progress } from "@/components/ui/progress";
 import { type BikeType, type ComponentMaintenance, MAINTENANCE_INTERVALS, getComponentHealth, getHealthColor, getHealthLabel, getSuspensionStatus } from "@/utils/maintenance";
+import {
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface BikeData {
     id: string;
@@ -120,11 +133,11 @@ export default function Bikes() {
     if (loading) return <div className="flex justify-center p-8"><Loader2 className="animate-spin text-emerald-500" /></div>;
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
+        <div className="space-y-8 animate-in fade-in duration-500">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Minhas Bikes</h1>
-                    <p className="text-muted-foreground">Gerencie suas bicicletas e acompanhe o uso de cada uma.</p>
+                    <h1 className="text-4xl font-black tracking-tight text-foreground">Minhas <span className="text-gradient">Bikes</span></h1>
+                    <p className="text-muted-foreground mt-2 font-medium">Gerencie suas máquinas e acompanhe o uso de cada componente.</p>
                 </div>
 
                 <Dialog open={isDialogOpen} onOpenChange={(open) => {
@@ -135,8 +148,8 @@ export default function Bikes() {
                     }
                 }}>
                     <DialogTrigger asChild>
-                        <Button className="bg-emerald-600 hover:bg-emerald-700 gap-2">
-                            <Plus className="h-4 w-4" /> Adicionar Bike
+                        <Button className="gradient-primary hover:opacity-90 text-white gap-2 shadow-glow font-bold rounded-xl px-6 h-11 transition-all active:scale-95">
+                            <Plus className="h-5 w-5" /> Adicionar Bike
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
@@ -191,7 +204,9 @@ export default function Bikes() {
                                 <p className="text-sm text-muted-foreground">{formData.brand} {formData.model}</p>
                             </div>
                             <DialogFooter>
-                                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">Salvar Bike</Button>
+                                <Button type="submit" className="gradient-primary hover:opacity-90 text-white shadow-glow font-bold rounded-xl w-full h-11">
+                                    {editingBike ? "Salvar Alterações" : "Cadastrar Bicicleta"}
+                                </Button>
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -200,62 +215,101 @@ export default function Bikes() {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {bikes.length === 0 ? (
-                    <Card className="col-span-full border-none shadow-sm py-12">
-                        <CardContent className="flex flex-col items-center justify-center text-center space-y-4">
-                            <div className="h-20 w-20 rounded-full bg-gray-50 flex items-center justify-center">
-                                <Bike className="h-10 w-10 text-gray-300" />
+                    <Card className="col-span-full border-white/10 bg-card/40 backdrop-blur-xl rounded-3xl py-16 shadow-xl">
+                        <CardContent className="flex flex-col items-center justify-center text-center space-y-6">
+                            <div className="h-24 w-24 rounded-3xl bg-muted p-6 shadow-inner rotate-3 animate-float">
+                                <Bike className="h-full w-full text-muted-foreground/40" />
                             </div>
-                            <div className="space-y-1">
-                                <p className="font-medium text-gray-900">Nenhuma bike cadastrada ainda</p>
-                                <p className="text-sm text-gray-500">Adicione suas bicicletas manualmente ou sincronize com o Strava.</p>
+                            <div className="space-y-2">
+                                <p className="font-black text-2xl text-foreground">Nenhuma bike por aqui</p>
+                                <p className="text-muted-foreground font-medium max-w-[300px]">Adicione suas bicicletas manualmente ou sincronize com o Strava para começar.</p>
                             </div>
-                            <Button onClick={() => setIsDialogOpen(true)} variant="outline" className="border-emerald-200 text-emerald-700">Adicionar bike manualmente</Button>
+                            <Button onClick={() => setIsDialogOpen(true)} className="gradient-primary hover:opacity-90 text-white shadow-glow font-bold rounded-xl px-8 h-12 transition-all active:scale-95">
+                                Adicionar primeira bike
+                            </Button>
                         </CardContent>
                     </Card>
                 ) : (
                     bikes.map((bike) => (
-                        <Card key={bike.id} className="border-none shadow-sm hover:shadow-md transition-shadow">
-                            <CardContent className="p-6">
+                        <Card key={bike.id} className="group overflow-hidden rounded-3xl border-white/10 bg-card/40 backdrop-blur-xl shadow-lg hover:shadow-2xl hover:border-primary/30 transition-all duration-300 relative">
+                            <div className="absolute top-0 right-0 w-32 h-32 gradient-primary opacity-0 group-hover:opacity-10 blur-3xl transition-opacity pointer-events-none" />
+                            <CardContent className="p-8">
                                 <div className="flex items-start justify-between">
-                                    <div className="h-12 w-12 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
-                                        <Bike className="h-6 w-6" />
+                                    <div className="h-16 w-16 rounded-2xl gradient-primary flex items-center justify-center text-white shadow-glow rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                                        <Bike className="h-8 w-8" />
                                     </div>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="text-xs"
-                                        onClick={() => {
-                                            setEditingBike(bike);
-                                            setFormData({
-                                                name: bike.name,
-                                                brand: bike.brand || "",
-                                                model: bike.model || "",
-                                                bike_type: bike.bike_type || "MTB"
-                                            });
-                                            setIsDialogOpen(true);
-                                        }}
-                                    >
-                                        Editar
-                                    </Button>
-                                </div>
-                                <div className="mt-4">
-                                    <h3 className="font-bold text-lg">{bike.name}</h3>
-                                    <p className="text-sm text-muted-foreground">{bike.brand} {bike.model}</p>
-                                </div>
-                                <div className="mt-6 flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-sm text-emerald-700 bg-emerald-50 w-fit px-3 py-1 rounded-full">
-                                        <MapPin className="h-4 w-4" />
-                                        <span>{((bike.total_mileage || 0) / 1000).toFixed(0)} km rodados</span>
+                                    <div className="flex gap-2">
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-10 w-10 rounded-xl hover:bg-white/5 text-muted-foreground hover:text-primary transition-colors"
+                                            onClick={() => {
+                                                setEditingBike(bike);
+                                                setFormData({
+                                                    name: bike.name,
+                                                    brand: bike.brand || "",
+                                                    model: bike.model || "",
+                                                    bike_type: bike.bike_type || "MTB"
+                                                });
+                                                setIsDialogOpen(true);
+                                            }}
+                                        >
+                                            <Wrench className="h-5 w-5" />
+                                        </Button>
+
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-10 w-10 rounded-xl hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                                                >
+                                                    <Trash2 className="h-5 w-5" />
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent className="bg-card/95 backdrop-blur-xl border-white/10 rounded-3xl shadow-2xl">
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle className="text-2xl font-black">Remover Bicicleta?</AlertDialogTitle>
+                                                    <AlertDialogDescription className="text-muted-foreground font-medium text-base">
+                                                        Esta ação não pode ser desfeita. Isso excluirá permanentemente a sua <span className="text-foreground font-bold">{bike.name}</span> e todo o histórico de manutenção associado.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter className="gap-3 mt-6">
+                                                    <AlertDialogCancel className="rounded-xl border-white/10 hover:bg-white/5 font-bold h-11">Cancelar</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                        className="rounded-xl bg-destructive hover:bg-destructive/90 text-white font-bold h-11 shadow-glow-sm"
+                                                        onClick={() => handleDeleteBike(bike.id)}
+                                                    >
+                                                        Sim, Remover
+                                                    </AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </div>
-                                    <span className="text-[10px] uppercase font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+                                </div>
+                                <div className="mt-6">
+                                    <h3 className="font-black text-2xl text-foreground group-hover:text-primary transition-colors">{bike.name}</h3>
+                                    <p className="text-muted-foreground font-bold mt-1 uppercase tracking-widest text-[10px] opacity-70">
+                                        {bike.brand} • {bike.model}
+                                    </p>
+                                </div>
+                                <div className="mt-8 flex items-center justify-between">
+                                    <div className="flex items-center gap-2.5 px-4 py-2 rounded-xl bg-primary/5 border border-primary/10">
+                                        <MapPin className="h-4 w-4 text-primary" />
+                                        <span className="text-sm font-black text-foreground">{((bike.total_mileage || 0) / 1000).toFixed(0)} km <span className="text-muted-foreground font-medium uppercase text-[10px] ml-1">Rodados</span></span>
+                                    </div>
+                                    <Badge className="bg-muted text-muted-foreground border-white/5 font-black uppercase text-[10px] px-3 py-1 rounded-lg">
                                         {bike.bike_type || 'MTB'}
-                                    </span>
+                                    </Badge>
                                 </div>
 
-                                <div className="mt-6 space-y-4">
-                                    <h4 className="text-xs font-semibold text-slate-500 uppercase flex items-center gap-2">
-                                        <Activity className="h-3 w-3" /> Saúde dos Componentes
-                                    </h4>
+                                <div className="mt-10 space-y-6">
+                                    <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                        <h4 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] flex items-center gap-2">
+                                            <Activity className="h-3.5 w-3.5 text-primary" /> Saúde dos Componentes
+                                        </h4>
+                                        <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                                    </div>
 
                                     {(['corrente', 'pastilhas', 'rolamentos', 'rodas'] as const).map((comp) => {
                                         const health = getComponentHealth(
@@ -263,20 +317,26 @@ export default function Bikes() {
                                             bike.component_maintenance?.[comp] || 0,
                                             (MAINTENANCE_INTERVALS[bike.bike_type as BikeType || 'MTB'] as any)[comp]
                                         );
+                                        const colorClass = getHealthColor(health);
                                         return (
-                                            <div key={comp} className="space-y-1.5">
-                                                <div className="flex justify-between text-xs">
-                                                    <span className="capitalize text-slate-600">{comp}</span>
-                                                    <span className={`font-medium ${getHealthColor(health)}`}>
+                                            <div key={comp} className="group/comp">
+                                                <div className="flex justify-between text-xs mb-2">
+                                                    <span className="font-bold text-muted-foreground group-hover/comp:text-foreground transition-colors capitalize">{comp}</span>
+                                                    <span className={`font-black ${colorClass}`}>
                                                         {getHealthLabel(health)} ({health.toFixed(0)}%)
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Progress value={health} className="h-1.5" />
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden p-0.5 border border-white/5">
+                                                        <div
+                                                            className={`h-full rounded-full transition-all duration-1000 shadow-glow-sm ${health > 80 ? 'bg-primary' : health > 40 ? 'bg-amber-500' : 'bg-destructive'}`}
+                                                            style={{ width: `${health}%` }}
+                                                        />
+                                                    </div>
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-6 w-6 text-slate-400 hover:text-emerald-600"
+                                                        className="h-8 w-8 rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-all opacity-40 group-hover/comp:opacity-100"
                                                         title="Reiniciar manutenção"
                                                         onClick={async () => {
                                                             const newMaint = { ...bike.component_maintenance, [comp]: bike.total_mileage || 0 };
@@ -290,7 +350,7 @@ export default function Bikes() {
                                                             }
                                                         }}
                                                     >
-                                                        <Activity className="h-3 w-3" />
+                                                        <Activity className="h-3.5 w-3.5" />
                                                     </Button>
                                                 </div>
                                             </div>
@@ -303,20 +363,26 @@ export default function Bikes() {
                                             bike.component_maintenance?.suspensao || 0,
                                             bike.component_maintenance?.suspensao_count || 0
                                         );
+                                        const colorClass = getHealthColor(status.health);
                                         return (
-                                            <div className="space-y-1.5">
-                                                <div className="flex justify-between text-xs">
-                                                    <span className="capitalize text-slate-600">{status.label}</span>
-                                                    <span className={`font-medium ${getHealthColor(status.health)}`}>
+                                            <div className="group/comp">
+                                                <div className="flex justify-between text-xs mb-2">
+                                                    <span className="font-bold text-muted-foreground group-hover/comp:text-foreground transition-colors capitalize">{status.label}</span>
+                                                    <span className={`font-black ${colorClass}`}>
                                                         {getHealthLabel(status.health)} ({status.health.toFixed(0)}%)
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-2">
-                                                    <Progress value={status.health} className="h-1.5" />
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden p-0.5 border border-white/5">
+                                                        <div
+                                                            className={`h-full rounded-full transition-all duration-1000 shadow-glow-sm ${status.health > 80 ? 'bg-primary' : status.health > 40 ? 'bg-amber-500' : 'bg-destructive'}`}
+                                                            style={{ width: `${status.health}%` }}
+                                                        />
+                                                    </div>
                                                     <Button
                                                         variant="ghost"
                                                         size="icon"
-                                                        className="h-6 w-6 text-slate-400 hover:text-emerald-600"
+                                                        className="h-8 w-8 rounded-lg hover:bg-primary/10 text-muted-foreground hover:text-primary transition-all opacity-40 group-hover/comp:opacity-100"
                                                         title="Reiniciar manutenção"
                                                         onClick={async () => {
                                                             const currentCount = bike.component_maintenance?.suspensao_count || 0;
@@ -335,7 +401,7 @@ export default function Bikes() {
                                                             }
                                                         }}
                                                     >
-                                                        <Activity className="h-3 w-3" />
+                                                        <Activity className="h-3.5 w-3.5" />
                                                     </Button>
                                                 </div>
                                             </div>
@@ -343,6 +409,10 @@ export default function Bikes() {
                                     })()}
                                 </div>
                             </CardContent>
+                            <div className="px-8 py-4 bg-muted/30 backdrop-blur-sm border-t border-white/5 flex items-center justify-between group-hover:bg-primary/5 transition-colors cursor-pointer" onClick={() => navigate('/dashboard/maintenance')}>
+                                <span className="text-xs font-black text-muted-foreground group-hover:text-primary transition-colors uppercase tracking-widest">Ver plano de manutenção</span>
+                                <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors group-hover:translate-x-1 transition-transform" />
+                            </div>
                         </Card>
                     ))
                 )}

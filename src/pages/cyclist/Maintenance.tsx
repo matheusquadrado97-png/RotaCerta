@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -144,9 +144,9 @@ export default function Maintenance() {
                         <div className="bg-white p-4 rounded-full shadow-sm mb-4">
                             <CalendarIcon className="h-8 w-8 text-slate-300" />
                         </div>
-                        <h3 className="text-lg font-semibold text-slate-900">Nenhuma manutenção encontrada</h3>
+                        <h3 className="text-lg font-semibold text-slate-900">Nenhuma manutençéo encontrada</h3>
                         <p className="text-slate-500 max-w-[300px] mt-1 mb-6">
-                            Você ainda não realizou agendamentos pelo Pelot�o.io.
+                            Você ainda néo realizou agendamentos pelo Pelotéo.io.
                         </p>
                         <Button className="bg-emerald-600 hover:bg-emerald-700">Explorar Oficinas</Button>
                     </CardContent>
@@ -157,7 +157,7 @@ export default function Maintenance() {
                     {nextMaintenance && (
                         <section className="space-y-4">
                             <h2 className="text-xl font-bold flex items-center gap-2">
-                                <Clock className="h-5 w-5 text-emerald-500" /> Próxima Manutenção
+                                <Clock className="h-5 w-5 text-emerald-500" /> Próxima Manutençéo
                             </h2>
                             <Card className="border-l-4 border-l-emerald-500 shadow-sm overflow-hidden">
                                 <CardContent className="p-0">
@@ -170,7 +170,7 @@ export default function Maintenance() {
                                                 {format(new Date(nextMaintenance.scheduled_at), "dd/MM")}
                                             </div>
                                             <div className="text-sm font-semibold text-slate-500 mt-1">
-                                                às {format(new Date(nextMaintenance.scheduled_at), "HH:mm")}
+                                                é s {format(new Date(nextMaintenance.scheduled_at), "HH:mm")}
                                             </div>
                                         </div>
 
@@ -186,7 +186,7 @@ export default function Maintenance() {
                                                     <div className="flex items-center gap-2 text-slate-600">
                                                         <Navigation className="h-4 w-4" />
                                                         <span className="font-semibold">{nextMaintenance.workshop.name}</span>
-                                                        <span className="text-slate-400">•</span>
+                                                        <span className="text-slate-400">â€¢</span>
                                                         <span className="text-sm">{nextMaintenance.workshop.neighborhood}, {nextMaintenance.workshop.city}</span>
                                                     </div>
                                                 </div>
@@ -237,7 +237,7 @@ export default function Maintenance() {
                                                         </Badge>
                                                     </div>
                                                     <p className="text-xs text-slate-500">
-                                                        Na <span className="font-bold text-slate-700">{apt.workshop.name}</span> • {apt.bike.name} • {format(new Date(apt.scheduled_at), "HH:mm")}
+                                                        Na <span className="font-bold text-slate-700">{apt.workshop.name}</span> â€¢ {apt.bike.name} â€¢ {format(new Date(apt.scheduled_at), "HH:mm")}
                                                     </p>
                                                 </div>
                                             </div>
