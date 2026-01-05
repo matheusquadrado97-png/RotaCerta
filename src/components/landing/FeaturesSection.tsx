@@ -46,7 +46,7 @@ export const FeaturesSection = () => {
             <span className="text-gradient">pedalar tranquilo</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Uma plataforma completa que conecta ciclistas a oficinas de qualidade, 
+            Uma plataforma completa que conecta ciclistas a oficinas de qualidade,
             com tecnologia inteligente de monitoramento.
           </p>
         </div>
@@ -55,14 +55,14 @@ export const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div
               key={feature.title}
-              className="group p-8 bg-card rounded-2xl border border-border hover:border-primary/30 hover:shadow-xl transition-all duration-300 animate-slide-up"
+              className="group p-8 gradient-card rounded-3xl border border-white/10 hover:border-primary/30 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-slide-up"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="w-14 h-14 gradient-primary rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <feature.icon className="w-7 h-7 text-primary-foreground" />
+              <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-glow">
+                <feature.icon className="w-8 h-8 text-primary-foreground" />
               </div>
-              <h3 className="font-display text-xl font-bold mb-3">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+              <h3 className="font-display text-2xl font-bold mb-4 group-hover:text-gradient transition-all duration-300">{feature.title}</h3>
+              <p className="text-muted-foreground leading-relaxed text-base font-medium">{feature.description}</p>
             </div>
           ))}
         </div>

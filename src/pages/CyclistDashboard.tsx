@@ -89,25 +89,27 @@ export default function CyclistDashboard() {
             </header>
 
             {/* Integration Banner */}
-            <Card className="bg-emerald-50 border-emerald-100 overflow-hidden relative border-none shadow-sm">
-                <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
-                    <div className="flex items-center gap-4">
-                        <div className="h-12 w-12 rounded-full bg-emerald-500 flex items-center justify-center text-white shrink-0">
-                            <Activity className="h-6 w-6" />
+            <Card className="gradient-hero border-white/20 overflow-hidden relative shadow-lg border animate-float">
+                <CardContent className="p-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                    <div className="flex items-center gap-6">
+                        <div className="h-16 w-16 rounded-2xl gradient-primary flex items-center justify-center text-white shrink-0 shadow-glow">
+                            <Activity className="h-8 w-8" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold text-emerald-900">Conecte seu Strava</h3>
-                            <p className="text-emerald-700">Sincronize suas atividades e acompanhe o desgaste dos seus componentes automaticamente.</p>
+                            <h3 className="text-2xl font-bold tracking-tight text-gradient">Conecte seu Strava</h3>
+                            <p className="text-muted-foreground font-medium max-w-md">Sincronize suas atividades e acompanhe o desgaste dos seus componentes automaticamente.</p>
                         </div>
                     </div>
                     <Button
                         onClick={handleConnectStrava}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2 shrink-0"
+                        className="bg-primary hover:bg-primary/90 text-white gap-2 shrink-0 h-12 px-8 font-bold shadow-glow hover:scale-105 transition-all duration-300"
                     >
-                        Conectar Agora <ChevronRight className="h-4 w-4" />
+                        Conectar Agora <ChevronRight className="h-5 w-5" />
                     </Button>
                 </CardContent>
-                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-100/50 rounded-full -translate-y-16 translate-x-16 pointer-events-none" />
+                {/* Decorative gradients */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-32 translate-x-32 pointer-events-none blur-3xl" />
+                <div className="absolute bottom-0 left-1/4 w-32 h-32 bg-secondary/5 rounded-full translate-y-16 pointer-events-none blur-2xl" />
             </Card>
 
             {/* Maintenance Alerts */}
@@ -135,13 +137,17 @@ export default function CyclistDashboard() {
 
                 return false;
             }) && (
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2 text-red-600">
-                            <AlertCircle className="h-5 w-5" />
-                            <h2 className="text-xl font-bold">Alertas de Manutenção</h2>
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3 text-destructive animate-pulse-slow">
+                            <div className="p-2 bg-destructive/10 rounded-lg">
+                                <AlertCircle className="h-6 w-6" />
+                            </div>
+                            <h2 className="text-2xl font-extrabold tracking-tight">Alertas de Manutenção</h2>
                         </div>
-                        <div className="grid gap-4 md:grid-cols-2">
+                        <div className="grid gap-6 md:grid-cols-2">
                             {bikes.map(bike => {
+                                // ... (rest of the logic remains same, just styling)
+                                // Fixing standardAlerts variable usage within the map
                                 const standardAlerts = (['corrente', 'pastilhas', 'rolamentos', 'rodas'] as const).filter(comp => {
                                     const health = getComponentHealth(
                                         bike.total_mileage || 0,
@@ -169,32 +175,31 @@ export default function CyclistDashboard() {
                                 })() : null;
 
                                 const allAlerts = [...standardAlerts, ...(suspAlert ? [suspAlert] : [])];
-
                                 if (allAlerts.length === 0) return null;
 
                                 return (
-                                    <Alert key={bike.id} variant="destructive" className="bg-red-50 border-red-100 text-red-900">
-                                        <Wrench className="h-4 w-4" />
-                                        <AlertTitle className="font-bold">{bike.name} precisa de atenção!</AlertTitle>
-                                        <AlertDescription className="mt-2 space-y-2">
-                                            {allAlerts.map(alert => {
-                                                return (
-                                                    <div key={alert.comp} className="flex flex-col gap-1">
-                                                        <div className="flex justify-between text-xs font-semibold">
-                                                            <span className="capitalize">{alert.label}</span>
-                                                            <span>{alert.health.toFixed(0)}% de vida útil</span>
-                                                        </div>
-                                                        <Progress value={alert.health} className="h-1 bg-red-200" />
+                                    <Alert key={bike.id} variant="destructive" className="bg-destructive/5 border-destructive/20 text-destructive-foreground shadow-lg backdrop-blur-sm p-6">
+                                        <Wrench className="h-5 w-5" />
+                                        <AlertTitle className="font-bold text-lg mb-4">{bike.name} precisa de atenção!</AlertTitle>
+                                        <AlertDescription className="space-y-4">
+                                            {allAlerts.map(alert => (
+                                                <div key={alert.comp} className="space-y-2">
+                                                    <div className="flex justify-between text-xs font-bold uppercase tracking-wider">
+                                                        <span>{alert.label}</span>
+                                                        <span>{alert.health.toFixed(0)}% restante</span>
                                                     </div>
-                                                );
-                                            })}
+                                                    <div className="h-1.5 w-full bg-destructive/10 rounded-full overflow-hidden">
+                                                        <div className="h-full bg-destructive transition-all duration-1000" style={{ width: `${alert.health}%` }} />
+                                                    </div>
+                                                </div>
+                                            ))}
                                             <Button
                                                 variant="outline"
                                                 size="sm"
-                                                className="mt-2 w-full border-red-200 text-red-700 hover:bg-red-100"
+                                                className="mt-4 w-full border-destructive/20 text-destructive hover:bg-destructive/10 font-bold"
                                                 onClick={() => navigate('/dashboard/bikes')}
                                             >
-                                                Ver Detalhes na Oficina
+                                                Agendar Manutenção Agora
                                             </Button>
                                         </AlertDescription>
                                     </Alert>
@@ -205,17 +210,22 @@ export default function CyclistDashboard() {
                 )}
 
             {/* Stats Grid */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 {stats.map((stat, idx) => (
-                    <Card key={idx} className="border-none shadow-sm hover:shadow-md transition-shadow">
+                    <Card key={idx} className="border-white/10 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 gradient-card group">
                         <CardContent className="p-6">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
-                                <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-sm font-bold text-muted-foreground uppercase tracking-wider">{stat.label}</span>
+                                <div className={`p-2 rounded-lg bg-background/50 group-hover:scale-110 transition-transform duration-300`}>
+                                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                                </div>
                             </div>
-                            <div className="text-2xl font-bold">{stat.value}</div>
+                            <div className="text-3xl font-extrabold tracking-tight">{stat.value}</div>
                             {stat.sub && (
-                                <p className="text-xs text-muted-foreground mt-1">{stat.sub}</p>
+                                <p className="text-xs font-semibold text-muted-foreground mt-2 flex items-center gap-1">
+                                    <span className="w-1 h-1 rounded-full bg-primary/40 block" />
+                                    {stat.sub}
+                                </p>
                             )}
                         </CardContent>
                     </Card>
@@ -224,34 +234,41 @@ export default function CyclistDashboard() {
 
             <div className="grid gap-6 lg:grid-cols-3">
                 {/* My Bikes Section */}
-                <Card className="lg:col-span-2 border-none shadow-sm">
-                    <CardHeader className="border-b border-gray-50 flex flex-row items-center justify-between space-y-0 pb-4">
-                        <CardTitle className="text-xl font-bold">Minhas Bikes</CardTitle>
-                        <Button variant="outline" size="sm" className="gap-2" onClick={() => navigate("/dashboard/bikes")}>
+                <Card className="lg:col-span-2 border-white/10 shadow-lg overflow-hidden">
+                    <CardHeader className="bg-muted/30 flex flex-row items-center justify-between space-y-0 pb-4 border-b border-white/10">
+                        <CardTitle className="text-2xl font-extra-bold tracking-tight">Minhas Bikes</CardTitle>
+                        <Button variant="outline" size="sm" className="gap-2 font-bold backdrop-blur-sm border-white/20 hover:bg-white/10" onClick={() => navigate("/dashboard/bikes")}>
                             <Bike className="h-4 w-4" /> Adicionar bike
                         </Button>
                     </CardHeader>
-                    <CardContent className="pt-6">
+                    <CardContent className="pt-8">
                         {bikes.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-12 text-center space-y-4">
-                                <div className="h-20 w-20 rounded-full bg-gray-50 flex items-center justify-center">
-                                    <Bike className="h-10 w-10 text-gray-300" />
+                            <div className="flex flex-col items-center justify-center py-16 text-center space-y-6">
+                                <div className="h-24 w-24 rounded-3xl gradient-hero flex items-center justify-center shadow-inner animate-float">
+                                    <Bike className="h-12 w-12 text-primary/40" />
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="font-medium text-gray-900">Nenhuma bike cadastrada ainda</p>
-                                    <p className="text-sm text-gray-500">Cadastre suas bicicletas para controlar as manutenções.</p>
+                                <div className="space-y-2">
+                                    <p className="text-xl font-bold">Nenhuma bike cadastrada</p>
+                                    <p className="text-muted-foreground max-w-xs mx-auto">Cadastre suas bicicletas agora para um controle preciso de manutenção.</p>
                                 </div>
-                                <Button className="bg-emerald-600 hover:bg-emerald-700" onClick={() => navigate("/dashboard/bikes")}>Adicionar bike</Button>
+                                <Button className="shadow-glow h-11 px-8 font-bold" onClick={() => navigate("/dashboard/bikes")}>Adicionar bike agora</Button>
                             </div>
                         ) : (
-                            <div className="grid gap-4 sm:grid-cols-2">
+                            <div className="grid gap-6 sm:grid-cols-2">
                                 {bikes.map((bike) => (
-                                    <Card key={bike.id} className="bg-gray-50/50 border-none shadow-none hover:bg-gray-50 transition-colors">
-                                        <CardContent className="p-4">
-                                            <h3 className="font-semibold text-lg">{bike.name}</h3>
-                                            <p className="text-sm text-muted-foreground">{bike.brand} {bike.model}</p>
-                                            <div className="mt-2 flex items-center gap-2 text-sm">
-                                                <MapPin className="h-4 w-4 text-emerald-500" />
+                                    <Card key={bike.id} className="bg-muted/20 border-white/10 shadow-sm hover:shadow-md hover:bg-muted/30 transition-all duration-300 cursor-pointer group">
+                                        <CardContent className="p-6">
+                                            <div className="flex items-start justify-between">
+                                                <div>
+                                                    <h3 className="font-bold text-xl group-hover:text-primary transition-colors">{bike.name}</h3>
+                                                    <p className="text-sm font-medium text-muted-foreground">{bike.brand} {bike.model}</p>
+                                                </div>
+                                                <div className="h-10 w-10 rounded-xl bg-background/50 flex items-center justify-center">
+                                                    <Bike className="h-6 w-6 text-primary/70" />
+                                                </div>
+                                            </div>
+                                            <div className="mt-6 flex items-center gap-3 text-sm font-bold bg-background/30 p-2 rounded-lg w-fit">
+                                                <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
                                                 <span>{((bike.total_mileage || 0) / 1000).toFixed(0)} km rodados</span>
                                             </div>
                                         </CardContent>
@@ -262,33 +279,37 @@ export default function CyclistDashboard() {
                     </CardContent>
                 </Card>
 
-                {/* Maintenance Alerts Sidebar */}
                 <div className="space-y-6">
-                    <Card className="border-none shadow-sm h-full">
-                        <CardHeader className="pb-2">
+                    <Card className="border-white/10 shadow-lg h-full overflow-hidden">
+                        <CardHeader className="bg-muted/30 pb-4 border-b border-white/10">
                             <CardTitle className="text-xl font-bold flex items-center gap-2">
-                                <AlertCircle className="h-5 w-5 text-emerald-500" /> Alertas
+                                <AlertCircle className="h-5 w-5 text-primary" /> Alertas Rápidos
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="p-4 rounded-xl bg-emerald-50 text-emerald-800 space-y-2 border border-emerald-100">
-                                <div className="flex items-center gap-2 font-semibold">
-                                    <Trophy className="h-4 w-4 text-emerald-500" />
+                        <CardContent className="space-y-8 pt-6">
+                            <div className="p-5 rounded-2xl gradient-hero text-foreground space-y-3 border border-white/20 shadow-sm relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform duration-500">
+                                    <Trophy className="h-12 w-12" />
+                                </div>
+                                <div className="flex items-center gap-2 font-bold text-primary">
+                                    <Trophy className="h-5 w-5" />
                                     Tudo em dia!
                                 </div>
-                                <p className="text-sm">
+                                <p className="text-sm font-medium leading-relaxed">
                                     Suas bikes estão com a manutenção em dia. Conecte com o Strava para monitorar o desgaste em tempo real.
                                 </p>
                             </div>
 
-                            <Card className="border-dashed border-2 bg-transparent shadow-none">
-                                <CardContent className="p-4 text-center space-y-3">
-                                    <Calendar className="h-8 w-8 text-gray-300 mx-auto" />
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium">Agendar Revisão</p>
-                                        <p className="text-xs text-muted-foreground">Encontre uma oficina próxima</p>
+                            <Card className="border-dashed border-2 border-white/20 bg-muted/10 shadow-none rounded-2xl hover:bg-muted/20 transition-all duration-300">
+                                <CardContent className="p-6 text-center space-y-4">
+                                    <div className="h-14 w-14 bg-background rounded-2xl flex items-center justify-center mx-auto shadow-sm">
+                                        <Calendar className="h-8 w-8 text-primary/30" />
                                     </div>
-                                    <Button variant="outline" size="sm" className="w-full gap-2" onClick={scrollToMap}>
+                                    <div className="space-y-1">
+                                        <p className="font-bold">Agendar Revisão</p>
+                                        <p className="text-xs text-muted-foreground">Encontre oficinas certificadas</p>
+                                    </div>
+                                    <Button variant="outline" size="sm" className="w-full gap-2 font-bold backdrop-blur-sm border-white/10" onClick={scrollToMap}>
                                         <Search className="h-4 w-4" /> Buscar Oficinas
                                     </Button>
                                 </CardContent>

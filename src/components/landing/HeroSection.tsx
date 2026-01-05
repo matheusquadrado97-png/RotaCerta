@@ -21,9 +21,9 @@ export const HeroSection = () => {
               <span>Integração oficial com Strava</span>
             </div>
 
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight">
+            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
               Sua bike sempre{" "}
-              <span className="text-gradient">pronta para rodar</span>
+              <span className="text-gradient animate-pulse-slow">pronta para rodar</span>
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-xl leading-relaxed">
@@ -33,13 +33,13 @@ export const HeroSection = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/auth">
-                <Button variant="hero" size="xl" className="w-full sm:w-auto">
+                <Button variant="hero" size="xl" className="w-full sm:w-auto shadow-glow transition-all duration-300 hover:scale-105 active:scale-95">
                   Começar
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
               <Link to="/auth?tab=register">
-                <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
+                <Button variant="heroOutline" size="xl" className="w-full sm:w-auto backdrop-blur-sm border-primary/20 hover:bg-primary/5 transition-all duration-300">
                   Criar conta
                 </Button>
               </Link>
@@ -66,19 +66,19 @@ export const HeroSection = () => {
           <div className="relative animate-fade-in" style={{ animationDelay: '0.3s' }}>
             <div className="relative z-10 space-y-4">
               {/* Main dashboard preview card */}
-              <div className="bg-card rounded-2xl shadow-xl p-6 border border-border">
-                <div className="flex items-center justify-between mb-6">
+              <div className="bg-card/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 border border-white/20 animate-float">
+                <div className="flex items-center justify-between mb-8">
                   <div>
-                    <h3 className="font-display font-bold text-lg">Canyon Aeroad CF SLX</h3>
-                    <p className="text-muted-foreground text-sm">2,450 km rodados</p>
+                    <h3 className="font-display font-bold text-xl">Canyon Aeroad CF SLX</h3>
+                    <p className="text-muted-foreground text-sm font-medium">2,450 km rodados</p>
                   </div>
-                  <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center">
-                    <Bike className="w-6 h-6 text-primary-foreground" />
+                  <div className="w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-glow">
+                    <Bike className="w-7 h-7 text-primary-foreground" />
                   </div>
                 </div>
 
                 {/* Component health bars */}
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <ComponentHealth name="Corrente" percentage={35} status="warning" />
                   <ComponentHealth name="Pneus" percentage={68} status="good" />
                   <ComponentHealth name="Cabos de Freio" percentage={82} status="good" />
@@ -87,27 +87,27 @@ export const HeroSection = () => {
               </div>
 
               {/* Alert notification */}
-              <div className="absolute -right-4 top-1/3 bg-card rounded-xl shadow-lg p-4 border border-border animate-float max-w-xs">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-destructive/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Bell className="w-5 h-5 text-destructive" />
+              <div className="absolute -right-8 top-1/4 bg-card/60 backdrop-blur-xl rounded-2xl shadow-2xl p-5 border border-white/20 animate-float max-w-xs z-20" style={{ animationDelay: '2s' }}>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-destructive/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Bell className="w-6 h-6 text-destructive animate-bounce" />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">Manutenção Urgente</p>
-                    <p className="text-muted-foreground text-xs">Pastilhas de freio com apenas 15% de vida útil</p>
+                    <p className="font-bold text-sm">Manutenção Urgente</p>
+                    <p className="text-muted-foreground text-xs leading-relaxed">Pastilhas de freio com apenas 15% de vida útil</p>
                   </div>
                 </div>
               </div>
 
               {/* Booking card */}
-              <div className="absolute -left-8 bottom-0 bg-card rounded-xl shadow-lg p-4 border border-border animate-float" style={{ animationDelay: '1s' }}>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-success/10 rounded-lg flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-success" />
+              <div className="absolute -left-12 bottom-4 bg-card/60 backdrop-blur-xl rounded-2xl shadow-2xl p-5 border border-white/20 animate-float z-20" style={{ animationDelay: '1s' }}>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center">
+                    <Calendar className="w-6 h-6 text-success" />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">Agendamento Confirmado</p>
-                    <p className="text-muted-foreground text-xs">Bike Shop Pro • Amanhã, 14h</p>
+                    <p className="font-bold text-sm">Agendamento Confirmado</p>
+                    <p className="text-muted-foreground text-xs font-medium">Bike Shop Pro • Amanhã, 14h</p>
                   </div>
                 </div>
               </div>
