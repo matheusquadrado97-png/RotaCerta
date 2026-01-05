@@ -135,16 +135,16 @@ export default function Settings() {
     return (
         <div className="space-y-8 max-w-4xl pb-10 animate-in fade-in duration-500">
             <div>
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Configurações</h1>
-                <p className="text-slate-500 mt-1">Gerencie seu perfil e informações de localização.</p>
+                <h1 className="text-4xl font-black tracking-tight text-gradient">Configurações</h1>
+                <p className="text-muted-foreground mt-1">Gerencie seu perfil e informações de localização.</p>
             </div>
 
             <div className="grid gap-8">
                 {/* Personal Info */}
-                <Card className="border-slate-200 shadow-sm overflow-hidden">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100">
+                <Card className="border-white/10 shadow-lg overflow-hidden bg-card/40 backdrop-blur-xl">
+                    <CardHeader className="bg-muted/30 border-b border-white/10">
                         <div className="flex items-center gap-2">
-                            <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                            <div className="p-2 bg-primary/10 rounded-lg text-primary">
                                 <User className="h-5 w-5" />
                             </div>
                             <div>
@@ -203,10 +203,10 @@ export default function Settings() {
                 </Card>
 
                 {/* Address Info */}
-                <Card className="border-slate-200 shadow-sm overflow-hidden">
-                    <CardHeader className="bg-slate-50/50 border-b border-slate-100">
+                <Card className="border-white/10 shadow-lg overflow-hidden bg-card/40 backdrop-blur-xl">
+                    <CardHeader className="bg-muted/30 border-b border-white/10">
                         <div className="flex items-center gap-2">
-                            <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
+                            <div className="p-2 bg-primary/10 rounded-lg text-primary">
                                 <MapPin className="h-5 w-5" />
                             </div>
                             <div>
@@ -269,7 +269,7 @@ export default function Settings() {
                 <div className="flex justify-end pt-4">
                     <Button
                         onClick={handleSave}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 font-bold h-12 shadow-lg shadow-emerald-100"
+                        className="gradient-primary hover:opacity-90 text-white px-8 font-bold h-12 shadow-glow"
                         disabled={saving}
                     >
                         {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <SettingsIcon className="h-4 w-4 mr-2" />}

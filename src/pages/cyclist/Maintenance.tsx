@@ -139,16 +139,16 @@ export default function Maintenance() {
                     <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
                 </div>
             ) : appointments.length === 0 ? (
-                <Card className="border-dashed border-2 py-20 bg-slate-50/50">
+                <Card className="border-dashed border-2 py-20 bg-muted/30 backdrop-blur-sm">
                     <CardContent className="flex flex-col items-center justify-center text-center">
-                        <div className="bg-white p-4 rounded-full shadow-sm mb-4">
-                            <CalendarIcon className="h-8 w-8 text-slate-300" />
+                        <div className="bg-card p-4 rounded-full shadow-sm mb-4 border border-white/10">
+                            <CalendarIcon className="h-8 w-8 text-muted-foreground" />
                         </div>
-                        <h3 className="text-lg font-semibold text-slate-900">Nenhuma manutençéo encontrada</h3>
-                        <p className="text-slate-500 max-w-[300px] mt-1 mb-6">
-                            Você ainda néo realizou agendamentos pelo Pelotéo.io.
+                        <h3 className="text-lg font-semibold text-foreground">Nenhuma manutenção encontrada</h3>
+                        <p className="text-muted-foreground max-w-[300px] mt-1 mb-6">
+                            Você ainda não realizou agendamentos pelo Pelotão.io.
                         </p>
-                        <Button className="bg-emerald-600 hover:bg-emerald-700">Explorar Oficinas</Button>
+                        <Button className="gradient-primary hover:opacity-90 text-white shadow-glow">Explorar Oficinas</Button>
                     </CardContent>
                 </Card>
             ) : (
@@ -157,20 +157,20 @@ export default function Maintenance() {
                     {nextMaintenance && (
                         <section className="space-y-4">
                             <h2 className="text-xl font-bold flex items-center gap-2">
-                                <Clock className="h-5 w-5 text-emerald-500" /> Próxima Manutençéo
+                                <Clock className="h-5 w-5 text-primary" /> Próxima Manutenção
                             </h2>
-                            <Card className="border-l-4 border-l-emerald-500 shadow-sm overflow-hidden">
+                            <Card className="border-l-4 border-l-primary shadow-lg overflow-hidden bg-card/40 backdrop-blur-xl border-white/10">
                                 <CardContent className="p-0">
                                     <div className="flex flex-col md:flex-row">
-                                        <div className="p-6 md:w-48 bg-emerald-50/30 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-slate-100">
-                                            <div className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">
+                                        <div className="p-6 md:w-48 bg-primary/5 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-white/10">
+                                            <div className="text-xs font-bold text-primary uppercase tracking-widest mb-1">
                                                 {format(new Date(nextMaintenance.scheduled_at), "EEE", { locale: ptBR })}
                                             </div>
-                                            <div className="text-3xl font-black text-slate-900">
+                                            <div className="text-3xl font-black text-foreground">
                                                 {format(new Date(nextMaintenance.scheduled_at), "dd/MM")}
                                             </div>
-                                            <div className="text-sm font-semibold text-slate-500 mt-1">
-                                                é s {format(new Date(nextMaintenance.scheduled_at), "HH:mm")}
+                                            <div className="text-sm font-semibold text-muted-foreground mt-1">
+                                                às {format(new Date(nextMaintenance.scheduled_at), "HH:mm")}
                                             </div>
                                         </div>
 
@@ -178,31 +178,31 @@ export default function Maintenance() {
                                             <div className="space-y-3">
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1">
-                                                        <h3 className="text-xl font-bold text-slate-900">{nextMaintenance.service.name}</h3>
+                                                        <h3 className="text-xl font-bold text-foreground">{nextMaintenance.service.name}</h3>
                                                         <Badge className={getStatusConfig(nextMaintenance.status).color}>
                                                             {getStatusConfig(nextMaintenance.status).label}
                                                         </Badge>
                                                     </div>
-                                                    <div className="flex items-center gap-2 text-slate-600">
+                                                    <div className="flex items-center gap-2 text-muted-foreground">
                                                         <Navigation className="h-4 w-4" />
                                                         <span className="font-semibold">{nextMaintenance.workshop.name}</span>
-                                                        <span className="text-slate-400">â€¢</span>
+                                                        <span className="text-muted-foreground/50">•</span>
                                                         <span className="text-sm">{nextMaintenance.workshop.neighborhood}, {nextMaintenance.workshop.city}</span>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex items-center gap-4">
-                                                    <div className="flex items-center gap-2 text-sm bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
-                                                        <BikeIcon className="h-4 w-4 text-emerald-500" />
-                                                        <span className="font-bold text-slate-700">{nextMaintenance.bike.name}</span>
-                                                        <span className="text-slate-500 font-medium">{nextMaintenance.bike.brand} {nextMaintenance.bike.model}</span>
+                                                    <div className="flex items-center gap-2 text-sm bg-muted/50 px-3 py-1.5 rounded-lg border border-white/10">
+                                                        <BikeIcon className="h-4 w-4 text-primary" />
+                                                        <span className="font-bold text-foreground">{nextMaintenance.bike.name}</span>
+                                                        <span className="text-muted-foreground font-medium">{nextMaintenance.bike.brand} {nextMaintenance.bike.model}</span>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div className="text-right">
-                                                <div className="text-sm text-slate-500 font-medium uppercase tracking-wider mb-1">Valor Estimado</div>
-                                                <div className="text-2xl font-black text-emerald-600">
+                                                <div className="text-sm text-muted-foreground font-medium uppercase tracking-wider mb-1">Valor Estimado</div>
+                                                <div className="text-2xl font-black text-primary">
                                                     R$ {nextMaintenance.service.price.toFixed(2)}
                                                 </div>
                                             </div>
@@ -216,7 +216,7 @@ export default function Maintenance() {
                     {/* History */}
                     <section className="space-y-4">
                         <h2 className="text-xl font-bold flex items-center gap-2">
-                            <History className="h-5 w-5 text-slate-400" /> Histórico de Serviços
+                            <History className="h-5 w-5 text-muted-foreground" /> Histórico de Serviços
                         </h2>
                         <div className="grid gap-4">
                             {appointments.filter(a => a.id !== nextMaintenance?.id).map((apt) => {
@@ -225,28 +225,28 @@ export default function Maintenance() {
                                     <Card key={apt.id} className="group hover:border-slate-300 transition-all">
                                         <CardContent className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
                                             <div className="flex items-start gap-4">
-                                                <div className="h-12 w-12 rounded-xl bg-slate-50 flex flex-col items-center justify-center text-slate-400 shrink-0 border border-slate-100 group-hover:bg-white group-hover:border-slate-200 transition-colors">
+                                                <div className="h-12 w-12 rounded-xl bg-muted flex flex-col items-center justify-center text-muted-foreground shrink-0 border border-white/10 group-hover:bg-card group-hover:border-white/20 transition-colors">
                                                     <span className="text-[10px] font-bold uppercase">{format(new Date(apt.scheduled_at), "MMM", { locale: ptBR })}</span>
                                                     <span className="text-lg font-black leading-none">{format(new Date(apt.scheduled_at), "dd")}</span>
                                                 </div>
                                                 <div className="space-y-1">
                                                     <div className="flex items-center gap-2">
-                                                        <h4 className="font-bold text-slate-900">{apt.service.name}</h4>
-                                                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 border-slate-200 bg-slate-50 ${config.color}`}>
+                                                        <h4 className="font-bold text-foreground">{apt.service.name}</h4>
+                                                        <Badge variant="outline" className={`text-[10px] px-1.5 py-0 border-white/10 bg-muted/50 ${config.color}`}>
                                                             {config.label}
                                                         </Badge>
                                                     </div>
-                                                    <p className="text-xs text-slate-500">
-                                                        Na <span className="font-bold text-slate-700">{apt.workshop.name}</span> â€¢ {apt.bike.name} â€¢ {format(new Date(apt.scheduled_at), "HH:mm")}
+                                                    <p className="text-xs text-muted-foreground">
+                                                        Na <span className="font-bold text-foreground">{apt.workshop.name}</span> • {apt.bike.name} • {format(new Date(apt.scheduled_at), "HH:mm")}
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center justify-between md:justify-end gap-6">
                                                 <div className="text-right">
-                                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total</div>
-                                                    <div className="font-bold text-slate-900">R$ {apt.service.price.toFixed(2)}</div>
+                                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Total</div>
+                                                    <div className="font-bold text-foreground">R$ {apt.service.price.toFixed(2)}</div>
                                                 </div>
-                                                <Button variant="ghost" size="sm" className="text-xs font-bold text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50">
+                                                <Button variant="ghost" size="sm" className="text-xs font-bold text-primary hover:text-primary/80 hover:bg-primary/10">
                                                     Ver Detalhes
                                                 </Button>
                                             </div>

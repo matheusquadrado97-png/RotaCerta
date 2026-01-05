@@ -227,25 +227,25 @@ export default function WorkshopSearch() {
         <div className="space-y-8 animate-in fade-in duration-500">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">Encontrar Oficina</h1>
-                    <p className="text-slate-500 mt-1">Busque as melhores oficinas da sua região e agende serviços.</p>
+                    <h1 className="text-4xl font-black tracking-tight text-gradient">Encontrar Oficina</h1>
+                    <p className="text-muted-foreground mt-1">Busque as melhores oficinas da sua região e agende serviços.</p>
                 </div>
             </div>
 
             {/* Search Bar */}
-            <Card className="border-none shadow-sm overflow-hidden bg-white">
+            <Card className="border-white/10 shadow-lg overflow-hidden bg-card/40 backdrop-blur-xl">
                 <CardContent className="p-0">
                     <form onSubmit={handleSearch} className="flex flex-col md:flex-row items-stretch">
-                        <div className="flex-1 flex items-center px-4 gap-3 border-b md:border-b-0 md:border-r border-slate-100 py-3">
-                            <Search className="h-5 w-5 text-slate-400" />
+                        <div className="flex-1 flex items-center px-4 gap-3 border-b md:border-b-0 md:border-r border-white/10 py-3">
+                            <Search className="h-5 w-5 text-muted-foreground" />
                             <Input
                                 placeholder="Nome da oficina, cidade ou bairro..."
-                                className="border-none shadow-none focus-visible:ring-0 text-base p-0"
+                                className="border-none shadow-none focus-visible:ring-0 text-base p-0 bg-transparent"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 rounded-none h-auto px-8 font-semibold py-4 md:py-0">
+                        <Button type="submit" className="gradient-primary hover:opacity-90 rounded-none h-auto px-8 font-semibold py-4 md:py-0 shadow-glow">
                             Buscar Oficinas
                         </Button>
                     </form>
@@ -259,28 +259,28 @@ export default function WorkshopSearch() {
                         <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
                     </div>
                 ) : workshops.length === 0 ? (
-                    <Card className="col-span-full py-16 flex flex-col items-center text-center">
-                        <Building2 className="h-16 w-16 text-slate-200 mb-4" />
-                        <h3 className="text-lg font-bold text-slate-900">Nenhuma oficina encontrada</h3>
-                        <p className="text-slate-500 max-w-xs mt-2">
+                    <Card className="col-span-full py-16 flex flex-col items-center text-center bg-card/40 backdrop-blur-xl border-white/10">
+                        <Building2 className="h-16 w-16 text-muted-foreground/30 mb-4" />
+                        <h3 className="text-lg font-bold text-foreground">Nenhuma oficina encontrada</h3>
+                        <p className="text-muted-foreground max-w-xs mt-2">
                             Tente buscar por um termo diferente ou mude sua localização.
                         </p>
                     </Card>
                 ) : (
                     workshops.map(ws => (
-                        <Card key={ws.id} className="group hover:border-emerald-200 transition-all duration-300 overflow-hidden flex flex-col">
-                            <div className="aspect-video bg-slate-100 flex items-center justify-center relative">
-                                <Building2 className="h-12 w-12 text-slate-300" />
-                                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md flex items-center gap-1 shadow-sm">
+                        <Card key={ws.id} className="group hover:border-primary/30 transition-all duration-300 overflow-hidden flex flex-col bg-card/40 backdrop-blur-xl border-white/10 shadow-lg hover:shadow-2xl">
+                            <div className="aspect-video bg-muted flex items-center justify-center relative">
+                                <Building2 className="h-12 w-12 text-muted-foreground/30" />
+                                <div className="absolute top-3 right-3 bg-card/90 backdrop-blur px-2 py-1 rounded-md flex items-center gap-1 shadow-sm border border-white/10">
                                     <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
-                                    <span className="text-xs font-bold text-slate-700">4.9</span>
+                                    <span className="text-xs font-bold text-foreground">4.9</span>
                                 </div>
                             </div>
                             <CardHeader className="p-5 pb-2">
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <CardTitle className="text-xl group-hover:text-emerald-700 transition-colors">{ws.name}</CardTitle>
-                                        <div className="flex items-center gap-1.5 text-slate-500 mt-1.5">
+                                        <CardTitle className="text-xl group-hover:text-primary transition-colors">{ws.name}</CardTitle>
+                                        <div className="flex items-center gap-1.5 text-muted-foreground mt-1.5">
                                             <MapPin className="h-4 w-4 shrink-0" />
                                             <span className="text-sm truncate">{ws.city}, {ws.neighborhood}</span>
                                         </div>
@@ -288,17 +288,17 @@ export default function WorkshopSearch() {
                                 </div>
                             </CardHeader>
                             <CardContent className="p-5 pt-2 flex-1 flex flex-col">
-                                <p className="text-sm text-slate-500 line-clamp-2 mt-2 leading-relaxed">
+                                <p className="text-sm text-muted-foreground line-clamp-2 mt-2 leading-relaxed">
                                     {ws.description || "Especialista em manutenção de bicicletas de alta performance."}
                                 </p>
                                 <div className="mt-auto pt-6 flex gap-3">
                                     <Button
                                         onClick={() => openBooking(ws)}
-                                        className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold gap-2"
+                                        className="flex-1 gradient-primary hover:opacity-90 text-white font-semibold gap-2 shadow-glow"
                                     >
                                         <Calendar className="h-4 w-4" /> Agendar
                                     </Button>
-                                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-emerald-600 hover:bg-emerald-50">
+                                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary hover:bg-primary/10">
                                         <ChevronRight className="h-5 w-5" />
                                     </Button>
                                 </div>

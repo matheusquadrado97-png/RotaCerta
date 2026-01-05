@@ -25,12 +25,12 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 import { Progress } from "@/components/ui/progress";
 import { type BikeType, type ComponentMaintenance, MAINTENANCE_INTERVALS, getComponentHealth, getHealthColor, getHealthLabel, getSuspensionStatus } from "@/utils/maintenance";
-import {
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 interface BikeData {
     id: string;
@@ -47,6 +47,7 @@ import { usePageTitle } from "@/hooks/usePageTitle";
 export default function Bikes() {
     usePageTitle("Minhas Bikes");
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [bikes, setBikes] = useState<BikeData[]>([]);
     const [loading, setLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -127,6 +128,22 @@ export default function Bikes() {
         } catch (error: any) {
             console.error("Error saving bike:", error);
             toast.error("Erro ao salvar bike: " + error.message);
+        }
+    };
+
+    const handleDeleteBike = async (id: string) => {
+        try {
+            const { error } = await supabase
+                .from('bikes')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+            toast.success("Bike removida com sucesso!");
+            fetchBikes();
+        } catch (error: any) {
+            console.error("Error deleting bike:", error);
+            toast.error("Erro ao remover bike: " + error.message);
         }
     };
 
