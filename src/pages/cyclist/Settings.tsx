@@ -116,8 +116,25 @@ export default function Settings() {
         }
     };
 
-    const handleDisconnect = () => {
-        toast.info("Tentativa de desconexão Strava. Funcionalidade em desenvolvimento.");
+    const handleDisconnect = async () => {
+        if (!user) return;
+
+        try {
+            const { error } = await supabase
+                .from('profiles')
+                .update({
+                    strava_access_token: null,
+                    strava_refresh_token: null
+                } as any)
+                .eq('id', user.id);
+
+            if (error) throw error;
+
+            toast.success("Conta do Strava desconectada com sucesso!");
+            // Optional: refresh profile to reflect state if needed, though tokens aren't displayed directly.
+        } catch (error: any) {
+            toast.error("Erro ao desconectar: " + error.message);
+        }
     };
 
     const handleChangePassword = () => {
