@@ -78,12 +78,12 @@ serve(async (req: Request) => {
             }
 
             // Check if bike exists
-            const { data: existing } = await supabaseAdmin
+            const { data: existing, error: findError } = await supabaseAdmin
                 .from('bikes')
                 .select('id')
                 .eq('strava_gear_id', bike.id)
                 .eq('user_id', user_id)
-                .single();
+                .maybeSingle(); // Use maybeSingle to avoid error on 0 rows
 
             if (existing) {
                 await supabaseAdmin.from('bikes').update({
@@ -111,6 +111,7 @@ serve(async (req: Request) => {
         })
 
     } catch (error: any) {
+        console.error("Strava Auth Error:", error);
         return new Response(JSON.stringify({ error: error.message }), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             status: 400,
